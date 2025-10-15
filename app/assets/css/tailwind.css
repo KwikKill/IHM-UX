@@ -122,6 +122,13 @@
   }
 }
 
+@layer components {
+  * {
+    border: 1px solid red;
+  }
+}
+
+
 #__nuxt {
   display: flex;
   flex-direction: column;
