@@ -28,33 +28,36 @@ onMounted(async () => {
 </script>
 
 <template>
-  <Header />
-  <NuxtRouteAnnouncer />
+  <div class="dark">
+    <Header />
+    <NuxtRouteAnnouncer />
 
-  <div class="flex flex-1 flex-col">
-    <Suspense>
-      <template #default>
-        <NuxtPage />
-      </template>
+    <div class="flex flex-1 flex-col">
+      <Suspense>
+        <template #default>
+          <NuxtPage />
+        </template>
 
-      <template #fallback>
-        <!-- Simple Tailwind spinner / loading placeholder -->
-        <div class="flex flex-1 items-center justify-center p-8">
-          <div class="flex flex-col items-center">
-            <div class="animate-spin rounded-full h-12 w-12 border-4 border-gray-200 border-t-blue-600 mb-4"/>
-            <div class="text-sm text-gray-600">Loading…</div>
+        <template #fallback>
+          <!-- Simple Tailwind spinner / loading placeholder -->
+          <div class="flex flex-1 items-center justify-center p-8">
+            <div class="flex flex-col items-center">
+              <div class="animate-spin rounded-full h-12 w-12 border-4 border-gray-200 border-t-blue-600 mb-4" />
+              <div class="text-sm text-gray-600">Loading…</div>
+            </div>
           </div>
-        </div>
-      </template>
-    </Suspense>
-  </div>
+        </template>
+      </Suspense>
+    </div>
 
-  <Footer />
+    <Footer />
 
-  <div v-if="dataStore.loading" class="fixed inset-0 z-50 flex items-center justify-center bg-white/75 dark:bg-black/50">
-    <div class="text-center">
-      <div class="animate-spin rounded-full h-12 w-12 border-4 border-gray-200 border-t-blue-600 mx-auto mb-4"/>
-      <div class="text-sm">Loading application data…</div>
+    <div v-if="dataStore.loading"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-white/75 dark:bg-black/50">
+      <div class="text-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-4 border-gray-200 border-t-blue-600 mx-auto mb-4" />
+        <div class="text-sm">Loading application data…</div>
+      </div>
     </div>
   </div>
 </template>
