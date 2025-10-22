@@ -22,7 +22,7 @@ export const useDataStore = defineStore('dataStore', {
         async fetchData<T = NextBus | BusStops | BusTopology | NetworkData | TrafficData>(initialUrl: string): Promise<T[]> {
             const limit = 100
             let offset = 0
-            const total = 500
+            const total = 100
             const data: T[] = []
 
             try {
