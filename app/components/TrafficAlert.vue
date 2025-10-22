@@ -1,21 +1,13 @@
 <template>
-  <div class="space-y-4 border rounded-lg p-4 bg-card shadow">
-    <Card 
-      v-for="alert in alerts" 
-      :key="alert.id"
-      class="overflow-hidden bg-secondary text-background"
-    >
+  <Card class="p-4">
+    <Card v-for="alert in alerts" :key="alert.id" class="overflow-hidden bg-secondary text-background">
       <CardHeader class="pb-3">
         <div class="flex items-start gap-4">
           <!-- Bus Line Logo -->
           <div class="flex-shrink-0">
-            <img 
-              :src="alert.busLineLogo" 
-              :alt="`${alert.busLine} logo`"
-              class="h-12 w-12 rounded-md object-contain"
-            >
+            <img :src="alert.busLineLogo" :alt="`${alert.busLine} logo`" class="h-12 w-12 rounded-md object-contain">
           </div>
-          
+
           <!-- Reason and Time -->
           <div class="flex-1 min-w-0">
             <CardTitle class="text-lg font-semibold mb-1">
@@ -27,7 +19,7 @@
           </div>
         </div>
       </CardHeader>
-      
+
       <CardContent>
         <p class="text-sm leading-relaxed">
           {{ alert.message }}
@@ -36,13 +28,10 @@
     </Card>
 
     <!-- Empty State -->
-    <div 
-      v-if="alerts.length === 0" 
-      class="text-center py-12 text-muted-foreground"
-    >
+    <div v-if="alerts.length === 0" class="text-center py-12 text-muted-foreground">
       <p>No traffic alerts at this time</p>
     </div>
-  </div>
+  </Card>
 </template>
 
 <script setup lang="ts">
@@ -117,13 +106,13 @@ const formatTime = (timestamp: string | Date): string => {
   const diffMs = now.getTime() - date.getTime()
   const diffMins = Math.floor(diffMs / 60000)
   const diffHours = Math.floor(diffMins / 60)
-  
+
   if (diffMins < 1) return 'Maintenant'
   if (diffMins < 60) return `Il y a ${diffMins} minute${diffMins !== 1 ? 's' : ''}`
   if (diffHours < 24) return `Il y a ${diffHours} heure${diffHours !== 1 ? 's' : ''} `
-  
-  return date.toLocaleDateString('fr-FR', { 
-    month: 'short', 
+
+  return date.toLocaleDateString('fr-FR', {
+    month: 'short',
     day: 'numeric',
     hour: '2-digit',
     minute: '2-digit'

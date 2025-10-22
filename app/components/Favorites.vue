@@ -1,3 +1,5 @@
 <template>
-  <div>Favs</div>
+  <Card class="p-4">
+    <div>Favs</div>
+  </Card>
 </template>
