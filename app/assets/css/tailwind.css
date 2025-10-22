@@ -123,9 +123,9 @@
 }
 
 @layer components {
-  * {
+  /* * {
     border: 1px solid red;
-  }
+  } */
 }
 
 

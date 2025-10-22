@@ -1,5 +1,13 @@
 <template>
-    <div class="footer">
-        <h1>My Application Footer</h1>
+    <div class="footer bg-primary text-white flex">
+        <div>
+            <span>Copyright Sysrez(TM) 2025</span>
+        </div>
+        <div class="flex-1 text-center">
+            <span>Plan du site | Contact</span>
+        </div>
+        <div class="text-right">
+            <span>Mentions légales | Politique de confidentialité</span>
+        </div>
     </div>
 </template>
