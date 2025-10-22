@@ -1,5 +1,5 @@
 <template>
-    <div class="footer bg-secondary text-primary flex">
+    <div class="footer bg-card text-primary flex">
         <div>
             <span>Copyright Sysrez(TM) 2025</span>
         </div>

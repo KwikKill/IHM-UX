@@ -1,9 +1,9 @@
 <template>
-  <div class="space-y-4 border rounded-lg p-4 bg-secondary shadow">
+  <div class="space-y-4 border rounded-lg p-4 bg-card shadow">
     <Card 
       v-for="alert in alerts" 
       :key="alert.id"
-      class="overflow-hidden bg-card text-card-foreground"
+      class="overflow-hidden bg-secondary text-background"
     >
       <CardHeader class="pb-3">
         <div class="flex items-start gap-4">
