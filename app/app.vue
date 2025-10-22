@@ -52,7 +52,8 @@ onMounted(async () => {
 
     <Footer />
 
-    <div v-if="dataStore.loading"
+    <div 
+      v-if="dataStore.loading"
       class="fixed inset-0 z-50 flex items-center justify-center bg-white/75 dark:bg-black/50">
       <div class="text-center">
         <div class="animate-spin rounded-full h-12 w-12 border-4 border-gray-200 border-t-blue-600 mx-auto mb-4" />

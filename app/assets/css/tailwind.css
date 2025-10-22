@@ -122,11 +122,11 @@
   }
 
   html {
-    @apply overscroll-contain bg-background;
+    @apply overscroll-contain;
   }
 }
 
-@layer components {
+@layer utilities {
   /* * {
     border: 1px solid red;
   } */
