@@ -28,7 +28,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="dark bg-background text-foreground">
+  <div class="dark bg-background text-foreground flex-1 flex flex-col">
     <Header />
     <NuxtRouteAnnouncer />
 
