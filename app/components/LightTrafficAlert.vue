@@ -10,13 +10,22 @@
         </CardHeader>
         <CardContent>
             <div v-if="dataStore.trafficData.length > 0" class="grid grid-cols-4 gap-2">
-                <div
+                <NuxtLink
                     v-for="alert in dataStore.trafficData"
                     :key="alert.idperturbation"
-                    class="overflow-hidden bg-secondary text-background"
+                    class="relative flex justify-center items-center"
+                    :to="`${alert.url}`"
                 >
-                    <img :src="dataStore.getBusByLineId(alert.idligne)?.image.url" :alt="`Logo de la ligne ${alert.idligne}`" class="h-12 w-12 rounded-md object-contain mx-auto mt-4"/>
-                </div>
+                    <img :src="dataStore.getBusByLineId(alert.idligne)?.image.url" :alt="`Logo de la ligne ${alert.idligne}`" class="h-12 w-12 rounded-md object-contain"/>
+                    <div
+                        class="absolute top-0 right-0 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center"
+                            :class="{
+                                'bg-red-600': alert.niveau.includes('Majeure'),
+                                'bg-orange-500': alert.niveau.includes('Bloquante') && !alert.niveau.includes('Majeure'),
+                                'bg-green-500': alert.niveau.includes('Mineur') && !alert.niveau.includes('Majeure') && !alert.niveau.includes('Bloquante'),
+                            }"
+                        />
+                </NuxtLink>
             </div>
 
             <!-- Empty State -->
