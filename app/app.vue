@@ -19,11 +19,11 @@ onMounted(async () => {
     dataStore.fetchBusTopology(),
     dataStore.fetchNetworkData(),
     dataStore.fetchTrafficData(),
+    dataStore.fetchBusInfo(),
   ]).catch((e) => {
     console.error('Initial data fetch failed', e)
   }).finally(() => {
     dataStore.setLoading(false)
-    console.log("fetch", dataStore.trafficData)
   })
 })
 </script>

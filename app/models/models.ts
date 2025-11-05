@@ -86,3 +86,21 @@ export type BusTopology = {
     visibilite: string,
     stop_id: string
 }
+
+export type BusInfo = {
+    idligne: string,
+    nomcourtligne: string,
+    date: string,
+    resolution: string,
+    image: {
+        thumbnail: boolean,
+        filename: string,
+        format: string,
+        width: number,
+        height: number,
+        id: string,
+        color_summary: string[],
+        url: string
+    },
+    taille: number
+}

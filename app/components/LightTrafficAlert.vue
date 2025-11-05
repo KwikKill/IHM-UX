@@ -9,9 +9,15 @@
             <Separator class="bg-border"/>
         </CardHeader>
         <CardContent>
-            <Card v-for="alert in dataStore.trafficData" :key="alert.idperturbation" class="overflow-hidden bg-secondary text-background">
-                Yes
-            </Card>
+            <div v-if="dataStore.trafficData.length > 0" class="grid grid-cols-4 gap-2">
+                <div
+                    v-for="alert in dataStore.trafficData"
+                    :key="alert.idperturbation"
+                    class="overflow-hidden bg-secondary text-background"
+                >
+                    {{ dataStore.getBusByLineId(alert.idligne) }}
+                </div>
+            </div>
 
             <!-- Empty State -->
             <div v-if="dataStore.trafficData.length === 0" class="text-center py-12 text-muted-foreground">

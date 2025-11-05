@@ -1,4 +1,4 @@
-import type { NextBus, BusStops, BusTopology, NetworkData, TrafficData } from "~/models/models"
+import type { NextBus, BusStops, BusTopology, NetworkData, TrafficData, BusInfo } from "~/models/models"
 
 interface DataState {
     loading: boolean
@@ -7,6 +7,7 @@ interface DataState {
     busTopology: BusTopology[]
     networkData: NetworkData[]
     trafficData: TrafficData[]
+    busInfo: BusInfo[]
 }
 
 export const useDataStore = defineStore('dataStore', {
@@ -16,13 +17,14 @@ export const useDataStore = defineStore('dataStore', {
         busStops: [],
         busTopology: [],
         networkData: [],
-        trafficData: []
+        trafficData: [],
+        busInfo: [],
     }),
     actions: {
-        async fetchData<T = NextBus | BusStops | BusTopology | NetworkData | TrafficData>(initialUrl: string): Promise<T[]> {
+        async fetchData<T = NextBus | BusStops | BusTopology | NetworkData | TrafficData>(initialUrl: string, full:boolean = false): Promise<T[]> {
             const limit = 100
             let offset = 0
-            const total = 100
+            let total = 100
             const data: T[] = []
 
             try {
@@ -41,9 +43,9 @@ export const useDataStore = defineStore('dataStore', {
                     const results: T[] = (json.results ?? []) as T[]
                     data.push(...results)
 
-                    /*if (typeof json.total_count === "number") {
+                    if (full && typeof json.total_count === "number") {
                         total = json.total_count
-                    }*/
+                    }
 
                     if (results.length === 0) break
                     offset += limit
@@ -82,8 +84,17 @@ export const useDataStore = defineStore('dataStore', {
             console.log("Fetched traffic data:", this.trafficData)
         },
 
+        async fetchBusInfo(): Promise<void> {
+            const initialUrl = 'https://data.rennesmetropole.fr/api/explore/v2.1/catalog/datasets/pictogrammes-des-lignes-de-bus-du-reseau-star/records'
+            this.busInfo = await this.fetchData(initialUrl, true)
+        },
+
         setLoading(status: boolean) {
             this.loading = status
-        }
+        },
+
+        getBusByLineId(lineId: string): BusInfo | undefined {
+            return this.busInfo.find(bus => bus.idligne === lineId)
+        },
     }
 })
