@@ -1,3 +1,4 @@
+import { sortLines } from "~/lib/utils"
 import type { NextBus, BusStops, BusTopology, NetworkData, TrafficData, BusInfo } from "~/models/models"
 
 interface DataState {
@@ -81,11 +82,7 @@ export const useDataStore = defineStore('dataStore', {
         async fetchTrafficData(): Promise<void> {
             const initialUrl = 'https://data.rennesmetropole.fr/api/explore/v2.1/catalog/datasets/alertes-trafic-en-temps-reel-sur-les-lignes-du-reseau-star/records'
             this.trafficData = await this.fetchData(initialUrl)
-            this.trafficData = this.trafficData.sort((a, b) => {
-                if (a.nomcourtligne.includes("C") && !b.nomcourtligne.includes("C")) return -1;
-                if (!a.nomcourtligne.includes("C") && b.nomcourtligne.includes("C")) return 1;
-                return a.nomcourtligne.localeCompare(b.nomcourtligne);
-            });
+            this.trafficData = this.trafficData.sort(sortLines);
             console.log("Fetched traffic data:", this.trafficData)
         },
 
