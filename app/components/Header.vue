@@ -1,5 +1,5 @@
 <template>
-    <div class="header grid grid-cols-3 p-4 items-center bg-card text-primary gap-2 sticky top-0">
+    <div class="z-99 header grid grid-cols-3 p-4 items-center bg-card text-primary gap-2 sticky top-0">
         <div>
             <NuxtLink to="/" class="text-3xl font-bold"><Icon name="material-symbols:format-letter-spacing-wider" size="2rem"/></NuxtLink>
         </div>
