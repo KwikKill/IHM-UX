@@ -78,7 +78,8 @@ export const useDataStore = defineStore('dataStore', {
 
         async fetchTrafficData(): Promise<void> {
             const initialUrl = 'https://data.rennesmetropole.fr/api/explore/v2.1/catalog/datasets/alertes-trafic-en-temps-reel-sur-les-lignes-du-reseau-star/records'
-            this.busStops = await this.fetchData(initialUrl)
+            this.trafficData = await this.fetchData(initialUrl)
+            console.log("Fetched traffic data:", this.trafficData)
         },
 
         setLoading(status: boolean) {

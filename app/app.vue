@@ -8,7 +8,7 @@ import { useDataStore } from '~/stores/data.store'
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 
-const dataStore = useDataStore(pinia)
+const dataStore = useDataStore()
 
 onMounted(async () => {
   dataStore.setLoading(true)
@@ -23,6 +23,7 @@ onMounted(async () => {
     console.error('Initial data fetch failed', e)
   }).finally(() => {
     dataStore.setLoading(false)
+    console.log("fetch", dataStore.trafficData)
   })
 })
 </script>
