@@ -15,7 +15,7 @@
                     :key="alert.idperturbation"
                     class="overflow-hidden bg-secondary text-background"
                 >
-                    {{ dataStore.getBusByLineId(alert.idligne) }}
+                    <img :src="dataStore.getBusByLineId(alert.idligne)?.image.url" :alt="`Logo de la ligne ${alert.idligne}`" class="h-12 w-12 rounded-md object-contain mx-auto mt-4"/>
                 </div>
             </div>
 

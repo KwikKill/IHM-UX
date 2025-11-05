@@ -93,8 +93,19 @@ export const useDataStore = defineStore('dataStore', {
             this.loading = status
         },
 
-        getBusByLineId(lineId: string): BusInfo | undefined {
-            return this.busInfo.find(bus => bus.idligne === lineId)
+        getBusByLineId(lineId: string, size: number | undefined = undefined): BusInfo | undefined {
+            if (size) {
+                return this.busInfo.find(bus => bus.idligne === lineId && bus.taille === size)
+            } else {
+                // search for greater size if size is 0
+                const bus = this.busInfo
+                    .filter(bus => bus.idligne === lineId)
+                    .sort((a, b) => b.taille - a.taille)[0]
+                if (bus) {
+                    return bus
+                }
+            }
+
         },
     }
 })
