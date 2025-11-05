@@ -2,6 +2,8 @@ export const useUserStore = defineStore('userStore', {
   state: () => ({
     logedIn: false,
     username: '',
+    stopFavorites: [] as string[],
+    lineFavorites: ["0004"] as string[],
   }),
   actions: {
     setLogedIn(status: boolean) {
@@ -9,6 +11,22 @@ export const useUserStore = defineStore('userStore', {
     },
     setUsername(name: string) {
         this.username = name
+    },
+    addStopFavorite(stopId: string) {
+        if (!this.stopFavorites.includes(stopId)) {
+            this.stopFavorites.push(stopId)
+        }
+    },
+    removeStopFavorite(stopId: string) {
+        this.stopFavorites = this.stopFavorites.filter(id => id !== stopId)
+    },
+    addLineFavorite(lineId: string) {
+        if (!this.lineFavorites.includes(lineId)) {
+            this.lineFavorites.push(lineId)
+        }
+    },
+    removeLineFavorite(lineId: string) {
+        this.lineFavorites = this.lineFavorites.filter(id => id !== lineId)
     },
   },
   persist: true,
