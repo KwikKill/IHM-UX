@@ -18,7 +18,7 @@
       <h2 class="font-semibold mt-4">Lignes favorites</h2>
       <Card v-for="lineId in userStore.lineFavorites" :key="lineId" class="mb-2">
         <CardContent class="flex justify-between">
-          <div>Ligne {{ getDataFromId(lineId)?.nom }}</div>
+          <div>Ligne {{ getDataFromId(lineId)?.nomcourtligne }}</div>
           <Button class="text-red-500 p-1 m-0" variant="destructive" @click="userStore.removeLineFavorite(lineId)"><Icon name="material-symbols:close" size="1rem"/></Button>
         </CardContent>
       </Card>
@@ -38,7 +38,7 @@ const dataStore = useDataStore()
 const getDataFromId = (id: string) => {
   console.log("Searching for id:", id)
   console.dir(dataStore.busStops)
-  return dataStore.busStops.find(stop => stop.stop_id === id)
+  return dataStore.busStops.find(stop => stop.idligne === id)
 }
 
 </script>
