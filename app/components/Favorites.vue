@@ -32,13 +32,13 @@
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from '~/stores/user.store'
-import { useDataStore } from '~/stores/data.store'
 const userStore = useUserStore()
 const dataStore = useDataStore()
 
 const getDataFromId = (id: string) => {
-  return dataStore.busStops.find(stop => stop.id === id)
+  console.log("Searching for id:", id)
+  console.dir(dataStore.busStops)
+  return dataStore.busStops.find(stop => stop.stop_id === id)
 }
 
 </script>
