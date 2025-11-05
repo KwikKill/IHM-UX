@@ -56,6 +56,19 @@ export type NetworkData = {
 }
 
 export type BusStops = {
+    idparcours: string,
+    libellecourtparcours: string | null,
+    idligne: string,
+    nomcourtligne: string,
+    idarret: string,
+    nomarret: string,
+    ordre: number,
+    estmonteeautorisee: boolean,
+    estdescenteautorisee: boolean,
+    stop_id: string
+}
+
+export type BusTopology = {
     id: string,
     datedebutversion: string,
     datefinversion: string | null,
@@ -71,18 +84,5 @@ export type BusStops = {
     estaccessiblepmr: boolean,
     mobilier: string,
     visibilite: string,
-    stop_id: string
-}
-
-export type BusTopology = {
-    idparcours: string,
-    libellecourtparcours: string | null,
-    idligne: string,
-    nomcourtligne: string,
-    idarret: string,
-    nomarret: string,
-    ordre: number,
-    estmonteeautorisee: boolean,
-    estdescenteautorisee: boolean,
     stop_id: string
 }
