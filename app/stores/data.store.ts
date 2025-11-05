@@ -81,6 +81,11 @@ export const useDataStore = defineStore('dataStore', {
         async fetchTrafficData(): Promise<void> {
             const initialUrl = 'https://data.rennesmetropole.fr/api/explore/v2.1/catalog/datasets/alertes-trafic-en-temps-reel-sur-les-lignes-du-reseau-star/records'
             this.trafficData = await this.fetchData(initialUrl)
+            this.trafficData = this.trafficData.sort((a, b) => {
+                if (a.nomcourtligne.includes("C") && !b.nomcourtligne.includes("C")) return -1;
+                if (!a.nomcourtligne.includes("C") && b.nomcourtligne.includes("C")) return 1;
+                return a.nomcourtligne.localeCompare(b.nomcourtligne);
+            });
             console.log("Fetched traffic data:", this.trafficData)
         },
 
@@ -107,5 +112,10 @@ export const useDataStore = defineStore('dataStore', {
             }
 
         },
+
+        getStopById(stopId: string): BusStops | undefined {
+            console.log(this.busStops)
+            return this.busStops.find(stop => stop.stop_id === stopId)
+        }
     }
 })
