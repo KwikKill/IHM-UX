@@ -13,13 +13,15 @@ const dataStore = useDataStore()
 onMounted(async () => {
   dataStore.setLoading(true)
 
+  const fake = false;
+
   await Promise.all([
-    dataStore.fetchNextBuses(),
-    dataStore.fetchBusStops(),
-    dataStore.fetchBusTopology(),
-    dataStore.fetchNetworkData(),
-    dataStore.fetchTrafficData(),
-    dataStore.fetchBusInfo(),
+    dataStore.fetchNextBuses(fake),
+    dataStore.fetchBusStops(fake),
+    dataStore.fetchBusTopology(fake),
+    dataStore.fetchNetworkData(fake),
+    dataStore.fetchTrafficData(fake),
+    dataStore.fetchBusInfo(fake),
   ]).catch((e) => {
     console.error('Initial data fetch failed', e)
   }).finally(() => {
@@ -55,7 +57,7 @@ onMounted(async () => {
 
     <div 
       v-if="dataStore.loading"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-white/75 dark:bg-black/50">
+      class="fixed inset-0 z-50 flex items-center justify-center bg-white dark:bg-black">
       <div class="text-center">
         <div class="animate-spin rounded-full h-12 w-12 border-4 border-gray-200 border-t-blue-600 mx-auto mb-4" />
         <div class="text-sm">Loading application data…</div>
