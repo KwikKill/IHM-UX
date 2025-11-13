@@ -28,6 +28,11 @@ onMounted(async () => {
     dataStore.setLoading(false)
   })
 })
+
+// Required for shadcn absolute components
+onMounted(() => {
+  document.body.classList.add('dark')
+})
 </script>
 
 <template>

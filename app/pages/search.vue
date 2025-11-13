@@ -48,26 +48,64 @@
 
         <!-- Filters -->
         <Card class="md:col-span-1 lg:col-span-1 p-4 flex flex-col gap-4">
-            <h4 class="text-sm font-semibold text-muted-foreground mb-2">Filtres</h4>
+            <CardHeader class="px-0">
+                <div class="mb-2 px-6">
+                    <CardTitle class="text-2xl font-bold">
+                        Filtres de recherche
+                    </CardTitle>
+                </div>
+                <Separator class="bg-border" />
+            </CardHeader>
 
             <!-- Line filter -->
-            <div>
-                <label class="block text-xs text-muted-foreground mb-1">Ligne ({{ uniqueLines.length }}) :</label>
-                <!-- TODO: Replace with Shadcn component -->
-                <select
-                    v-model="lineFilter"
-                    class="w-full border border-border rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
-                >
-                    <option value="">Toutes les lignes</option>
-                    <option
-                        v-for="line in uniqueLines"
-                        :key="line.idligne"
-                        :value="line.idligne"
-                    >
-                        Ligne {{ line.nomcourtligne }}
-                    </option>
-                </select>
-            </div>
+            <CardContent class="flex flex-col gap-4">
+                <!-- Checkbox PMR -->
+                <div>
+                    <div class="flex items-center gap-2">
+                        <Checkbox
+                            id="pmrFilter"
+                            v-model="pmrFilter"
+                        />
+                        <label
+                            for="pmrFilter"
+                            class="block text-xs mb-1"
+                        >
+                            Accessible personnes à mobilité réduite :
+                        </label>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-xs mb-1">Ligne ({{ uniqueLines.length }}) :</label>
+
+                    <Select v-model="lineFilter">
+                        <SelectTrigger class="w-full">
+                            <SelectValue placeholder="Toutes les lignes" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem
+                                value="all"
+                            >
+                                Toutes les lignes
+                            </SelectItem>
+                            <SelectItem
+                                v-for="line in uniqueLines"
+                                :key="line.idligne"
+                                :value="line.idligne"
+                            >
+                                <div class="flex items-center">
+                                    <img
+                                        :src="line.image.url"
+                                        :alt="`Logo de la ligne ${line.nomcourtligne}`"
+                                        class="inline h-5 w-5 mr-2 object-contain"
+                                    >
+                                    Ligne {{ line.nomcourtligne }}
+                                </div>
+                            </SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+            </CardContent>
         </Card>
 
         <!-- Traffic alert (Mobile) -->
@@ -79,10 +117,17 @@
 import { ref, computed, watch } from 'vue'
 import Separator from '~/components/ui/separator/Separator.vue'
 import Button from '~/components/ui/button/Button.vue'
+import Checkbox from '~/components/ui/checkbox/Checkbox.vue'
+import Select from '~/components/ui/select/Select.vue'
+import SelectTrigger from '~/components/ui/select/SelectTrigger.vue'
+import SelectValue from '~/components/ui/select/SelectValue.vue'
+import SelectContent from '~/components/ui/select/SelectContent.vue'
+import SelectItem from '~/components/ui/select/SelectItem.vue'
 
 const dataStore = useDataStore()
 const searchQuery = ref('')
-const lineFilter = ref('')
+const lineFilter = ref('all')
+const pmrFilter = ref(false)
 
 // --- Pagination state ---
 const currentPage = ref(0)
@@ -105,7 +150,7 @@ const filteredBuses = computed(() => {
     return dataStore.nextBus.filter(bus =>
         (bus.nomarret.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
             bus.idligne.toString().includes(searchQuery.value)) &&
-        (lineFilter.value === '' || bus.idligne.toString() === lineFilter.value)
+        (lineFilter.value === 'all' || bus.idligne.toString() === lineFilter.value)
     )
 })
 
