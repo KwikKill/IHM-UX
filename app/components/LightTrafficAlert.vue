@@ -24,7 +24,7 @@
                     >
                         <img
                             :src="dataStore.getBusByLineId(alert.idligne)?.image.url"
-                            :alt="`Logo de la ligne ${alert.idligne}`" class="h-12 w-12 rounded-md object-contain"
+                            :alt="`Logo ligne ${alert.nomcourtligne}`" class="h-12 w-12 rounded-md object-contain"
                         >
                         <div
                             class="absolute top-0 right-0 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center"

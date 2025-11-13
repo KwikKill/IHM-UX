@@ -10,6 +10,7 @@ interface DataState {
   networkData: NetworkData[]
   trafficData: TrafficData[]
   busInfo: BusInfo[]
+  tosUpdated: string
 }
 
 export const useDataStore = defineStore('dataStore', {
@@ -21,6 +22,7 @@ export const useDataStore = defineStore('dataStore', {
     networkData: [],
     trafficData: [],
     busInfo: [],
+    tosUpdated: "24 octobre 2025"
   }),
   actions: {
     async fetchData<T = NextBus | BusStops | BusTopology | NetworkData | TrafficData>(initialUrl: string, full: boolean = false): Promise<T[]> {
