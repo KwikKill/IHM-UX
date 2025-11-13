@@ -4,7 +4,7 @@
     <Card
       v-for="(alert, index) in paginatedData"
       :key="index"
-      class="overflow-hidden bg-secondary text-background"
+      class="overflow-hidden bg-secondary text-background gap-0"
     >
       <CardHeader class="pb-3">
         <div class="flex items-start gap-4">
@@ -34,6 +34,7 @@
               {{ new Date(alert.debutvalidite).toLocaleString() }} -
               {{ alert.finvalidite ? new Date(alert.finvalidite).toLocaleString() : 'Indefinite' }}
             </p>
+            <Separator class="bg-primary" />
           </div>
         </div>
       </CardHeader>
@@ -78,6 +79,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import type { TrafficData } from '~/models/models'
 import { ref, computed } from 'vue'
 import Button from './ui/button/Button.vue'
+import Separator from './ui/separator/Separator.vue'
 
 const nbPage = ref(0)
 const pageSize = ref(4)

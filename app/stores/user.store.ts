@@ -1,13 +1,13 @@
 export const useUserStore = defineStore('userStore', {
   state: () => ({
-    logedIn: false,
+    loggedIn: false,
     username: '',
     stopFavorites: ["6-2243"] as string[],
     lineFavorites: ["0006"] as string[],
   }),
   actions: {
     setLogedIn(status: boolean) {
-        this.logedIn = status
+        this.loggedIn = status
     },
     setUsername(name: string) {
         this.username = name
