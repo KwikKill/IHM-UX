@@ -1,20 +1,38 @@
 <template>
-  <Card class="p-4">
-    <Card v-for="alert in alerts" :key="alert.id" class="overflow-hidden bg-secondary text-background">
+  <Card class="p-4 gap-4">
+    <!-- Alerts -->
+    <Card
+      v-for="(alert, index) in paginatedData"
+      :key="index"
+      class="overflow-hidden bg-secondary text-background"
+    >
       <CardHeader class="pb-3">
         <div class="flex items-start gap-4">
           <!-- Bus Line Logo -->
-          <div class="flex-shrink-0">
-            <img :src="alert.busLineLogo" :alt="`${alert.busLine} logo`" class="h-12 w-12 rounded-md object-contain">
+          <div class="relative flex justify-center items-center p-2">
+            <img
+              :src="dataStore.getBusByLineId(alert.idligne)?.image.url"
+              :alt="`Logo de la ligne ${alert.idligne}`"
+              class="h-12 w-12 rounded-md object-contain"
+            >
+            <div
+              class="absolute top-0 right-0 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center"
+              :class="{
+                'bg-red-600': alert.niveau.includes('Majeure'),
+                'bg-orange-500': alert.niveau.includes('Bloquante') && !alert.niveau.includes('Majeure'),
+                'bg-green-500': alert.niveau.includes('Mineure') && !alert.niveau.includes('Majeure') && !alert.niveau.includes('Bloquante'),
+              }"
+            />
           </div>
 
           <!-- Reason and Time -->
           <div class="flex-1 min-w-0">
             <CardTitle class="text-lg font-semibold mb-1">
-              {{ alert.reason }}
+              {{ alert.titre }}
             </CardTitle>
             <p class="text-sm text-muted-foreground">
-              {{ formatTime(alert.timestamp) }}
+              {{ new Date(alert.debutvalidite).toLocaleString() }} -
+              {{ alert.finvalidite ? new Date(alert.finvalidite).toLocaleString() : 'Indefinite' }}
             </p>
           </div>
         </div>
@@ -22,100 +40,85 @@
 
       <CardContent>
         <p class="text-sm leading-relaxed">
-          {{ alert.message }}
+          {{ alert.description }}
         </p>
       </CardContent>
     </Card>
 
     <!-- Empty State -->
-    <div v-if="alerts.length === 0" class="text-center py-12 text-muted-foreground">
+    <div v-if="paginatedData.length === 0" class="text-center py-12 text-muted-foreground">
       <p>No traffic alerts at this time</p>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div v-if="totalPages > 1" class="flex justify-center items-center gap-4 pt-4">
+      <Button
+        class="cursor-pointer"
+        :disabled="nbPage === 0"
+        @click="prevPage"
+      >
+        Previous
+      </Button>
+      <span class="text-sm">
+        Page {{ nbPage + 1 }} / {{ totalPages }}
+      </span>
+      <Button
+        class="cursor-pointer"
+        :disabled="nbPage >= totalPages - 1"
+        @click="nextPage"
+      >
+        Next
+      </Button>
     </div>
   </Card>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import type { TrafficData } from '~/models/models'
+import { ref, computed } from 'vue'
+import Button from './ui/button/Button.vue'
 
-// Define the alert interface
-interface BusAlert {
-  id: string | number
-  busLine: string
-  busLineLogo: string
-  reason: string
-  timestamp: string | Date
-  message: string
+const nbPage = ref(0)
+const pageSize = ref(4)
+
+const dataStore = useDataStore()
+
+// --- Base data getter (existing logic) ---
+const getData = (): TrafficData[] => {
+  const niveauOrder = ['Majeure', 'Bloquante', 'Mineure']
+  const map = new Map()
+  for (const a of dataStore.trafficData) {
+    let idx = niveauOrder.findIndex(n => a.niveau.includes(n))
+    if (idx === -1) idx = niveauOrder.length
+    const key = a.idligne
+    if (!map.has(key) || idx < map.get(key).idx) {
+      map.set(key, { alert: a, idx })
+    }
+  }
+  return Array.from(map.values())
+    .map(v => v.alert)
+    .sort((a, b) => {
+      const aIndex = niveauOrder.findIndex(n => a.niveau.includes(n))
+      const bIndex = niveauOrder.findIndex(n => b.niveau.includes(n))
+      return aIndex - bIndex
+    })
 }
 
-// Import your store (adjust the path as needed)
-// Example: import { useAlertStore } from '~/stores/alertStore'
-// const alertStore = useAlertStore()
+// --- Pagination logic ---
+const totalPages = computed(() => Math.ceil(getData().length / pageSize.value))
 
-const alerts = computed<BusAlert[]>(() => [
-  {
-    id: 1,
-    busLine: 'C1',
-    busLineLogo: '/images/line-a-logo.png',
-    reason: 'Delai',
-    timestamp: new Date(Date.now() - 15 * 60000), // 15 minutes ago
-    message: 'Le bus C1 est retardé de 15 minutes en raison de la circulation dense sur son itinéraire.'
-  },
-  {
-    id: 2,
-    busLine: 'C4',
-    busLineLogo: '/images/line-b-logo.png',
-    reason: 'Interruption de service',
-    timestamp: new Date(Date.now() - 2 * 3600000), // 2 hours ago
-    message: 'Le C4 est ENCORE interrompu parce que.'
-  },
-  {
-    id: 3,
-    busLine: 'C2',
-    busLineLogo: '/images/line-c-logo.png',
-    reason: 'Travaux',
-    timestamp: new Date(Date.now() - 3 * 86400000), // 3 days ago
-    message: 'Des travaux de voirie affectent le service du C2 jusqu\'au 30 juin. Des itinéraires alternatifs sont en place.'
-  },
-  {
-    id: 4,
-    busLine: 'C3',
-    busLineLogo: '/images/line-d-logo.png',
-    reason: 'Accident',
-    timestamp: new Date(Date.now() - 5 * 60000), // 5 minutes ago
-    message: 'Un accident impliquant un véhicule a bloqué la route principale empruntée par le C3, causant des retards importants.'
-  },
-  {
-    id: 5,
-    busLine: '14',
-    busLineLogo: '/images/line-e-logo.png',
-    reason: 'Conditions météorologiques',
-    timestamp: new Date(Date.now() - 30 * 60000), // 30 minutes ago
-    message: 'En raison de fortes pluies, le service du 14 est ralenti. Veuillez prévoir des temps de trajet supplémentaires.'
-  }
-])
+const paginatedData = computed(() => {
+  const start = nbPage.value * pageSize.value
+  const end = start + pageSize.value
+  return getData().slice(start, end)
+})
 
-// Or get from store:
-// const alerts = computed(() => alertStore.alerts)
+function nextPage() {
+  if (nbPage.value < totalPages.value - 1) nbPage.value++
+}
 
-
-// Format timestamp
-const formatTime = (timestamp: string | Date): string => {
-  const date = new Date(timestamp)
-  const now = new Date()
-  const diffMs = now.getTime() - date.getTime()
-  const diffMins = Math.floor(diffMs / 60000)
-  const diffHours = Math.floor(diffMins / 60)
-
-  if (diffMins < 1) return 'Maintenant'
-  if (diffMins < 60) return `Il y a ${diffMins} minute${diffMins !== 1 ? 's' : ''}`
-  if (diffHours < 24) return `Il y a ${diffHours} heure${diffHours !== 1 ? 's' : ''} `
-
-  return date.toLocaleDateString('fr-FR', {
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  })
+function prevPage() {
+  if (nbPage.value > 0) nbPage.value--
 }
 </script>
