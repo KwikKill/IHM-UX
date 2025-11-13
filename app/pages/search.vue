@@ -21,14 +21,29 @@
 
             <!-- Listing -->
             <Card class="flex-1">
-                <div class="text-center py-4 text-muted-foreground">
+                <div class="text-center p-4 py-2 text-muted-foreground flex flex-col gap-2 text-2xl">
                     <div
                         v-for="(item, index) in paginatedBuses"
                         :key="index"
-                        class="border-b border-border last:border-0 py-2"
+                        class="py-2 flex items-center bg-secondary rounded-md px-4 gap-2 justify-between"
                     >
-                        <p>{{ item.nomarret }} - Ligne {{ item.idligne }} : Arrivée dans {{ item.arriveetheorique }}
-                            minutes</p>
+                        <div
+                            class="flex"
+                        >
+                            <img
+                                :src="dataStore.getBusByLineId(item.idligne)?.image.url"
+                                :alt="`Logo de la ligne ${dataStore.getBusByLineId(item.idligne)?.nomcourtligne}`"
+                                class="inline h-7 w-7 mr-2 object-contain"
+                            >
+                            <p>
+                                {{ dataStore.getBusByLineId(item.idligne)?.nomcourtligne }} - {{ item.nomarret }} -> {{ item.destination }} (200M)
+                            </p>
+                        </div>
+                        <div
+                            class="bg-primary border-2 border-gray-700 rounded-2xl px-2 py-1 text-white"
+                        >
+                            4m
+                        </div>
                     </div>
 
                     <!-- Empty state -->
@@ -39,9 +54,21 @@
 
                 <!-- Pagination controls -->
                 <div v-if="totalPages > 1" class="flex flex-wrap justify-center items-center gap-2 pt-4">
-                    <Button :disabled="currentPage === 0" @click="prevPage">Previous</Button>
+                    <Button
+                        :disabled="currentPage === 0"
+                        class="cursor-pointer"
+                        @click="prevPage"
+                    >
+                        Previous
+                    </Button>
                     <span class="text-sm">Page {{ currentPage + 1 }} / {{ totalPages }}</span>
-                    <Button :disabled="currentPage >= totalPages - 1" @click="nextPage">Next</Button>
+                    <Button
+                        :disabled="currentPage >= totalPages - 1"
+                        class="cursor-pointer"
+                        @click="nextPage"
+                    >
+                        Next
+                    </Button>
                 </div>
             </Card>
         </div>
