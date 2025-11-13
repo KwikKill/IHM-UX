@@ -13,7 +13,7 @@
                     <h2 class="text-xl font-medium">Source des données</h2>
                     <p class="text-base mt-2">
                         Les données sont récupérées depuis l'API Open Data de Rennes Métropole (
-                        <a href="https://data.rennesmetropole.fr" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline">https://data.rennesmetropole.fr</a>
+                        <a href="https://data.rennesmetropole.fr" target="_blank" rel="noopener noreferrer" class="text-blue-700 hover:underline">https://data.rennesmetropole.fr</a>
                         ). Les jeux de données consultés depuis le store incluent notamment :
                     </p>
                     <ul class="list-disc pl-5 mt-2">

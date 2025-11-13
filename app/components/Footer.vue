@@ -3,7 +3,7 @@
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 md:gap-6 gap-3 items-center">
       
       <!-- Brand / Copyright -->
-      <div class="flex justify-center md:justify-start">
+      <div class="flex justify-center">
         <span class="text-sm text-muted-foreground">© 2025 Sysrez™ — Tous droits réservés</span>
       </div>
 
@@ -21,7 +21,7 @@
       </div>
 
       <!-- Legal Links -->
-      <div class="flex justify-center md:justify-end flex-wrap md:gap-4 gap-3 text-sm font-medium">
+      <div class="flex justify-center flex-wrap md:gap-4 gap-3 text-sm font-medium">
         <NuxtLink to="/terms" class="hover:text-primary transition-colors">
           Conditions d'utilisation
         </NuxtLink>
