@@ -3,7 +3,7 @@
     <header class="z-50 sticky top-0 w-full bg-card border-b border-border shadow-sm">
         <div class="flex items-center justify-between p-4 md:px-8">
             <!-- Logo -->
-            <NuxtLink to="/" class="flex items-center gap-2 text-primary text-3xl font-bold">
+            <NuxtLink to="/" class="flex items-center gap-1 text-primary text-3xl font-bold">
                 <nuxt-img src="/logo.png" alt="Logo de l'application" width="36" height="36" class="rounded-lg" />
                 wish
             </NuxtLink>
