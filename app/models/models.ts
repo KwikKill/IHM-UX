@@ -14,8 +14,8 @@ export type NextBus = {
     arrivee: string,
     depart: string,
     idcourse: string,
-    idbus: string,
-    numerobus: number,
+    idbus: string | null,
+    numerobus: number | null,
     precision: string,
     visibilite: string,
     heureextraction: string
@@ -42,7 +42,7 @@ export type NetworkData = {
     idligne: string | null,
     nomcourtligne: string | null,
     sens: number | null,
-    description: string,
+    description: string | null,
     file: {
         thumbnail: boolean,
         filename: string,
@@ -63,8 +63,8 @@ export type BusStops = {
     idarret: string,
     nomarret: string,
     ordre: number,
-    estmonteeautorisee: boolean,
-    estdescenteautorisee: boolean,
+    estmonteeautorisee: string,
+    estdescenteautorisee: string,
     stop_id: string
 }
 
@@ -72,7 +72,7 @@ export type BusTopology = {
     id: string,
     datedebutversion: string,
     datefinversion: string | null,
-    estversionactive: boolean,
+    estversionactive: string,
     code: string,
     nom: string,
     codeinseecommune: string,
@@ -81,8 +81,8 @@ export type BusTopology = {
         lon: number,
         lat: number
     },
-    estaccessiblepmr: boolean,
-    mobilier: string,
+    estaccessiblepmr: string,
+    mobilier: string | null,
     visibilite: string,
     stop_id: string
 }
@@ -99,7 +99,7 @@ export type BusInfo = {
         width: number,
         height: number,
         id: string,
-        color_summary: string[],
+        color_summary?: string[],
         url: string
     },
     taille: number

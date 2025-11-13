@@ -13,7 +13,7 @@ const dataStore = useDataStore()
 onMounted(async () => {
   dataStore.setLoading(true)
 
-  const fake = false;
+  const fake = true;
 
   await Promise.all([
     dataStore.fetchNextBuses(fake),
