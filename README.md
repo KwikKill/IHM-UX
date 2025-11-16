@@ -1,75 +1,51 @@
-# Nuxt Minimal Starter
+# IHM-UX
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+This repo contains an application that uses the Rennes Metropole API to show data related to public transport, such as traffic alerts, a map view, search and favorites. It uses Nuxt, Vue 3, Pinia for state and Tailwind CSS for styling.
 
-## Setup
+Some components come from shadcn-vue.
 
-Make sure to install dependencies:
+## Features
+
+- View traffic alerts and light-traffic alerts
+- Interactive map page
+- Search and Favorites pages
+- Simple profile page
+
+# Prerequisites
+
+- Node.js 18+ (Nuxt 3 recommends Node 18+)
+- `npm` (or `pnpm` / `yarn` — adjust commands if you use them)
+
+# Quick start
+
+## Install dependencies:
 
 ```bash
-# npm
 npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
 ```
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
+## Start the development server (hot-reload):
 
 ```bash
-# npm
 npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
-
-Build the application for production:
+## Build for production:
 
 ```bash
-# npm
 npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
 ```
 
-Locally preview production build:
+## Preview the production build locally:
 
 ```bash
-# npm
 npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## Project layout: 
+
+- `app/` — Nuxt app (pages, components, assets)
+- `app/pages/` — route pages (index, map, profile, search, etc.)
+- `app/components/` — reusable UI components
+- `app/stores/` — Pinia stores
+- `public/` — static assets
