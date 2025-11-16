@@ -137,6 +137,10 @@ export const useDataStore = defineStore('dataStore', {
 
     },
 
+    getBusStopById(stopId: string): BusTopology | undefined {
+      return this.busTopology.find(stop => stop.id === stopId)
+    },
+
     getStopById(stopId: string): BusStops | undefined {
       console.log(this.busStops)
       return this.busStops.find(stop => stop.stop_id === stopId)

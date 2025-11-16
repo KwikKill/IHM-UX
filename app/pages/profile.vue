@@ -93,7 +93,7 @@
 
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import Favorites from '~/components/Favorites.vue'
 
 const userStore = useUserStore()
@@ -103,6 +103,13 @@ const newPass = ref('')
 const confirmPass = ref('')
 const message = ref('')
 const messageType = ref<'success'|'error'|''>('')
+
+// if user is not logged in, redirect to home
+onMounted(() => {
+  if (!userStore.loggedIn) {
+    navigateTo('/')
+  }
+})
 
 function onChangePassword() {
   message.value = ''
