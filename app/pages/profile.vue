@@ -15,17 +15,17 @@
           <form class="mt-3 space-y-3" aria-label="Changer le mot de passe" @submit.prevent="onChangePassword">
             <div>
               <label for="current" class="block text-sm font-medium">Mot de passe actuel</label>
-              <input id="current" v-model="current" type="password" class="mt-1 block w-full border rounded-md p-2" autocomplete="current-password" />
+              <input id="current" v-model="current" type="password" class="mt-1 block w-full border rounded-md p-2" autocomplete="current-password" >
             </div>
 
             <div>
               <label for="newpass" class="block text-sm font-medium">Nouveau mot de passe</label>
-              <input id="newpass" v-model="newPass" type="password" class="mt-1 block w-full border rounded-md p-2" autocomplete="new-password" />
+              <input id="newpass" v-model="newPass" type="password" class="mt-1 block w-full border rounded-md p-2" autocomplete="new-password" >
             </div>
 
             <div>
               <label for="confirm" class="block text-sm font-medium">Confirmer le nouveau mot de passe</label>
-              <input id="confirm" v-model="confirmPass" type="password" class="mt-1 block w-full border rounded-md p-2" autocomplete="new-password" />
+              <input id="confirm" v-model="confirmPass" type="password" class="mt-1 block w-full border rounded-md p-2" autocomplete="new-password" >
             </div>
 
             <div class="flex items-center justify-end gap-2">

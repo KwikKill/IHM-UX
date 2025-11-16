@@ -8,20 +8,20 @@
                     Si vous avez des questions ou des retours, utilisez ce formulaire pour nous contacter.
                 </p>
 
-                <form class="mt-6 space-y-4" @submit.prevent="handleSubmit" aria-labelledby="contact-title">
+                <form class="mt-6 space-y-4" aria-labelledby="contact-title" @submit.prevent="handleSubmit">
                     <div>
                         <label for="name" class="block text-sm font-medium">Nom</label>
-                        <input id="name" name="name" type="text" class="mt-1 block w-full border rounded-md p-2" />
+                        <input id="name" name="name" type="text" class="mt-1 block w-full border rounded-md p-2" >
                     </div>
 
                     <div>
                         <label for="email" class="block text-sm font-medium">E‑mail</label>
-                        <input id="email" name="email" type="email" class="mt-1 block w-full border rounded-md p-2" />
+                        <input id="email" name="email" type="email" class="mt-1 block w-full border rounded-md p-2" >
                     </div>
 
                     <div>
                         <label for="message" class="block text-sm font-medium">Message</label>
-                        <textarea id="message" name="message" rows="5" class="mt-1 block w-full border rounded-md p-2"></textarea>
+                        <textarea id="message" name="message" rows="5" class="mt-1 block w-full border rounded-md p-2"/>
                     </div>
 
                     <div class="flex justify-end">
