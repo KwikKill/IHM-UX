@@ -1,6 +1,6 @@
 <template>
     <!-- Header -->
-    <header class="z-50 sticky top-0 w-full bg-card border-b border-border shadow-sm">
+    <header class="z-[10000] sticky top-0 w-full bg-card border-b border-border shadow-sm">
         <div class="flex items-center justify-between p-4 md:px-8">
             <!-- Logo -->
             <NuxtLink to="/" class="flex items-center gap-1 text-primary text-3xl font-bold">
