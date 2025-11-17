@@ -26,9 +26,9 @@ export const useDataStore = defineStore('dataStore', {
   }),
   actions: {
     async fetchData<T = NextBus | BusStops | BusTopology | NetworkData | TrafficData>(initialUrl: string, full: boolean = false): Promise<T[]> {
-      const limit = 2000
+      const limit = 100
       let offset = 0
-      let total = 100
+      let total = 3000
       const data: T[] = []
 
       try {
