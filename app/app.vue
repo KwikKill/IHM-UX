@@ -26,6 +26,18 @@ onMounted(async () => {
     console.error('Initial data fetch failed', e)
   }).finally(() => {
     dataStore.setLoading(false)
+
+    // Download initial data
+    /*const data = dataStore.getAllDataAsJSON()
+    const blob = new Blob([data], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = 'app-data.json'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)*/
   })
 })
 

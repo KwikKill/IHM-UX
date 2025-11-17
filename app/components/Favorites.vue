@@ -1,5 +1,5 @@
 <template>
-  <Card class="p-4">
+  <Card class="p-4 flex-1">
     <CardTitle>Favoris</CardTitle>
     <CardContent class="flex flex-col gap-1">
       <h2 class="font-semibold mt-2">Arrêts favoris</h2>

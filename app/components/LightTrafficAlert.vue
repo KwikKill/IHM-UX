@@ -1,5 +1,5 @@
 <template>
-    <Card>
+    <Card class="flex-1">
         <CardHeader class="px-0">
             <div class="mb-2 px-6">
                 <CardTitle class="text-2xl font-bold">

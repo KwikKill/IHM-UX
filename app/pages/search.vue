@@ -30,7 +30,7 @@
                         <div class="flex items-center gap-3">
                             <div
                                 class="flex items-center justify-center h-8 w-8 rounded-md text-sm font-bold text-white shadow"
-                                :style="{ backgroundColor: getLineColor(String(item.idligne)) }"
+                                :style="{ backgroundColor: '#7c3aed' }"
                             >
                                 {{ dataStore.getBusByLineId(item.idligne)?.nomcourtligne }}
                             </div>
@@ -42,7 +42,7 @@
                                     class="inline h-7 w-7 mr-2 object-contain"
                                 >
                                 <p class="text-sm">
-                                    {{ dataStore.getBusByLineId(item.idligne)?.nomcourtligne }} - {{ item.nomarret }} -> {{ item.destination }} (200m)
+                                    {{ item.nomarret }} -> {{ item.destination }} (200m)
                                 </p>
                             </div>
                         </div>
@@ -196,13 +196,6 @@ const uniqueLines = computed(() => {
 
     return Array.from(new Set(lines)).sort((a, b) => Number(a.idligne.toString()) - Number(b.idligne.toString()))
 })
-
-function getLineColor(id: string) {
-    const line = dataStore.getBusByLineId(String(id))
-    const record = line as unknown as Record<string, unknown>
-    const c = record['color']
-    return typeof c === 'string' ? c : '#7c3aed'
-}
 
 // --- Filtered buses ---
 const filteredBuses = computed(() => {

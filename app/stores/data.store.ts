@@ -26,7 +26,7 @@ export const useDataStore = defineStore('dataStore', {
   }),
   actions: {
     async fetchData<T = NextBus | BusStops | BusTopology | NetworkData | TrafficData>(initialUrl: string, full: boolean = false): Promise<T[]> {
-      const limit = 100
+      const limit = 2000
       let offset = 0
       let total = 100
       const data: T[] = []
@@ -144,6 +144,19 @@ export const useDataStore = defineStore('dataStore', {
     getStopById(stopId: string): BusStops | undefined {
       console.log(this.busStops)
       return this.busStops.find(stop => stop.stop_id === stopId)
+    },
+
+    getAllDataAsJSON(): string {
+      const data = {
+        nextBus: this.nextBus,
+        busStops: this.busStops,
+        busTopology: this.busTopology,
+        networkData: this.networkData,
+        trafficData: this.trafficData,
+        busInfo: this.busInfo,
+        tosUpdated: this.tosUpdated
+      }
+      return JSON.stringify(data, null, 2)
     }
   }
 })

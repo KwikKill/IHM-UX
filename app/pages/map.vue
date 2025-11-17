@@ -1,94 +1,96 @@
 <template>
-    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 p-3">
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 p-3 flex-1">
         <!-- Left column: alerts + favorites -->
-        <div class="md:col-span-1 lg:col-span-1 flex flex-col gap-4">
+        <div class="md:col-span-1 lg:col-span-1 flex flex-col gap-4 flex-1">
             <LightTrafficAlert />
-            <Favorites />
         </div>
 
         <!-- Map -->
-        <div class="md:col-span-2 lg:col-span-3 flex flex-col gap-4">
+        <div class="md:col-span-2 lg:col-span-3 flex flex-col gap-4 flex-1">
             <Card class="flex-1 p-0">
                 <div id="leaflet-map" class="flex-1 h-full w-full rounded-md" />
             </Card>
         </div>
 
         <!-- Filters -->
-        <Card class="md:col-span-1 lg:col-span-1 p-4 flex flex-col gap-4">
-            <CardHeader class="px-0">
-                <div class="mb-2 px-6">
-                    <CardTitle class="text-2xl font-bold">Filtres</CardTitle>
-                </div>
-                <Separator class="bg-border" />
-            </CardHeader>
-
-            <CardContent class="flex flex-col gap-3 px-2">
-                <div class="flex items-start gap-2">
-                    <Checkbox id="pmrFilter" v-model="pmrFilter" />
-                    <div class="text-sm">
-                        <label for="pmrFilter" class="block font-medium">Accessible mobilité réduite</label>
-                        <span class="text-xs text-muted-foreground">Afficher uniquement les arrêts accessibles</span>
+        <div class="md:col-span-1 lg:col-span-1 flex flex-col gap-4 flex-1">
+            <Card class="md:col-span-1 lg:col-span-1 p-4 flex flex-col gap-4">
+                <CardHeader class="px-0">
+                    <div class="mb-2 px-6">
+                        <CardTitle class="text-2xl font-bold">Filtres</CardTitle>
                     </div>
-                </div>
+                    <Separator class="bg-border" />
+                </CardHeader>
 
-                <div>
-                    <label class="block text-xs mb-1">Type d'arrêt :</label>
-                    <Select v-model="stopType">
-                        <SelectTrigger class="w-full">
-                            <SelectValue placeholder="Tous les types" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="all">Tous les types</SelectItem>
-                            <SelectItem value="Abri simple">Abri simple</SelectItem>
-                            <SelectItem value="Abri double">Abri double</SelectItem>
-                            <SelectItem value="Abri auvent">Abri auvent</SelectItem>
-                            <SelectItem value="Poteau">Poteau</SelectItem>
-                            <SelectItem value="Non matérialisé">Non matérialisé</SelectItem>
-                        </SelectContent>
-                    </Select>
-                </div>
+                <CardContent class="flex flex-col gap-3 px-2">
+                    <div class="flex items-start gap-2">
+                        <Checkbox id="pmrFilter" v-model="pmrFilter" />
+                        <div class="text-sm">
+                            <label for="pmrFilter" class="block font-medium">Accessible mobilité réduite</label>
+                            <span class="text-xs text-muted-foreground">Afficher uniquement les arrêts accessibles</span>
+                        </div>
+                    </div>
 
-                <div>
-                    <label class="block text-xs mb-1">Précision de l'estimation:</label>
-                    <Select v-model="precision">
-                        <SelectTrigger class="w-full">
-                            <SelectValue placeholder="Toutes les précisions" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="all">Toutes</SelectItem>
-                            <SelectItem value="Temps réel">Temps réel</SelectItem>
-                            <SelectItem value="Applicable">Applicable</SelectItem>
-                        </SelectContent>
-                    </Select>
-                </div>
+                    <div>
+                        <label class="block text-xs mb-1">Type d'arrêt :</label>
+                        <Select v-model="stopType">
+                            <SelectTrigger class="w-full">
+                                <SelectValue placeholder="Tous les types" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="all">Tous les types</SelectItem>
+                                <SelectItem value="Abri simple">Abri simple</SelectItem>
+                                <SelectItem value="Abri double">Abri double</SelectItem>
+                                <SelectItem value="Abri auvent">Abri auvent</SelectItem>
+                                <SelectItem value="Poteau">Poteau</SelectItem>
+                                <SelectItem value="Non matérialisé">Non matérialisé</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
 
-                <div>
-                    <label class="block text-xs mb-1">Lignes de bus ({{ uniqueLines.length }}) :</label>
-                    <Select v-model="lineFilter">
-                        <SelectTrigger class="w-full">
-                            <SelectValue placeholder="Toutes les lignes" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="all">Toutes les lignes</SelectItem>
-                            <SelectItem
-                                v-for="line in uniqueLines"
-                                :key="line.idligne"
-                                :value="line.idligne"
-                            >
-                                <div class="flex items-center">
-                                    <img
-                                        :src="line.image?.url"
-                                        :alt="`Logo de la ligne ${line.nomcourtligne}`"
-                                        class="inline h-5 w-5 mr-2 object-contain"
-                                    >
-                                    Ligne {{ line.nomcourtligne }}
-                                </div>
-                            </SelectItem>
-                        </SelectContent>
-                    </Select>
-                </div>
-            </CardContent>
-        </Card>
+                    <div>
+                        <label class="block text-xs mb-1">Précision de l'estimation:</label>
+                        <Select v-model="precision">
+                            <SelectTrigger class="w-full">
+                                <SelectValue placeholder="Toutes les précisions" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="all">Toutes</SelectItem>
+                                <SelectItem value="Temps réel">Temps réel</SelectItem>
+                                <SelectItem value="Applicable">Applicable</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs mb-1">Lignes de bus ({{ uniqueLines.length }}) :</label>
+                        <Select v-model="lineFilter">
+                            <SelectTrigger class="w-full">
+                                <SelectValue placeholder="Toutes les lignes" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="all">Toutes les lignes</SelectItem>
+                                <SelectItem
+                                    v-for="line in uniqueLines"
+                                    :key="line.idligne"
+                                    :value="line.idligne"
+                                >
+                                    <div class="flex items-center">
+                                        <img
+                                            :src="line.image?.url"
+                                            :alt="`Logo de la ligne ${line.nomcourtligne}`"
+                                            class="inline h-5 w-5 mr-2 object-contain"
+                                        >
+                                        Ligne {{ line.nomcourtligne }}
+                                    </div>
+                                </SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </CardContent>
+            </Card>
+            <Favorites />
+        </div>
 
         <!-- Modal for selected stop -->
         <div v-if="showModal" class="fixed inset-0 z-[100000] flex items-center justify-center">
@@ -100,7 +102,40 @@
                 </div>
 
                 <div class="flex flex-col gap-2">
-                    <div v-if="stopBuses.length === 0" class="text-sm text-muted-foreground">TODO</div>
+                    <div v-if="stopBuses.length === 0" class="text-sm text-muted-foreground">
+                        Aucun bus prévu à cet arrêt dans les prochaines minutes.
+                    </div>
+                    <div v-else class="flex flex-col gap-2 text-muted-foreground">
+                        <div
+                            v-for="(item, index) in stopBuses"
+                            :key="index"
+                            class="py-2 flex items-center bg-secondary rounded-md px-4 gap-3 justify-between"
+                        >
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="flex items-center justify-center h-8 w-8 rounded-md text-sm font-bold text-white shadow"
+                                    :style="{ backgroundColor: '#7c3aed' }"
+                                >
+                                    {{ dataStore.getBusByLineId(item.idligne)?.nomcourtligne }}
+                                </div>
+
+                                <div class="flex items-center">
+                                    <img
+                                        :src="dataStore.getBusByLineId(item.idligne)?.image.url"
+                                        :alt="`Logo de la ligne ${dataStore.getBusByLineId(item.idligne)?.nomcourtligne}`"
+                                        class="inline h-7 w-7 mr-2 object-contain"
+                                    >
+                                    <p class="text-sm">
+                                        {{ item.nomarret }} -> {{ item.destination }} (200m)
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="bg-primary text-white rounded-full px-3 py-1 text-sm font-semibold">
+                                4m
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="pt-3 flex justify-end">
                         <Button @click="closeModal">Fermer</Button>
@@ -179,8 +214,29 @@ const filteredStops = computed(() => {
 
 const stopBuses = computed(() => {
     const s = selectedStop.value
+    console.log('Selected stop:', s)
     if (!s) return []
-    return dataStore.nextBus.filter(b => b.idarret === s.id || b.idarret === s.stop_id)
+    const filtered = dataStore.nextBus.filter(
+        b => b.idarret === s.id
+        || b.idarret === s.stop_id
+    )
+    // for each filtered entry, only keep one by line + destination (the first one to arrive)
+    const uniqueMap = new Map<string, typeof filtered[0]>()
+    for (const entry of filtered) {
+        const key = `${entry.idligne}-${entry.destination}`
+        if (!uniqueMap.has(key)) {
+            uniqueMap.set(key, entry)
+        } else {
+            const existing = uniqueMap.get(key)!
+            if (
+                new Date(entry.arrivee)
+                < new Date(existing.arrivee)
+            ) {
+                uniqueMap.set(key, entry)
+            }
+        }
+    }
+    return Array.from(uniqueMap.values())
 })
 
 /*function timeToNow(timeStr: string | undefined) {
