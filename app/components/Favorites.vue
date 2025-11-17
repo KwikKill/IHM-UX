@@ -6,7 +6,7 @@
       <Card v-for="stopId in userStore.stopFavorites" :key="stopId" class="mb-2">
         <CardContent class="flex justify-between">
           <div>Arrêt {{ dataStore.getStopById(stopId)?.nomarret }}</div>
-          <Button class="text-red-500 p-1 m-0" variant="destructive" @click="userStore.removeStopFavorite(stopId)"><Icon name="material-symbols:close" size="1rem"/></Button>
+          <Button class="text-red-500 p-1 m-0 cursor-pointer" variant="destructive" @click="userStore.removeStopFavorite(stopId)"><Icon name="material-symbols:close" size="1rem"/></Button>
         </CardContent>
       </Card>
       <Card v-if="userStore.stopFavorites.length === 0">
@@ -19,7 +19,7 @@
       <Card v-for="lineId in userStore.lineFavorites" :key="lineId" class="mb-2">
         <CardContent class="flex justify-between">
           <div>Ligne {{ dataStore.getBusByLineId(lineId)?.nomcourtligne }}</div>
-          <Button class="text-red-500 p-1 m-0" variant="destructive" @click="userStore.removeLineFavorite(lineId)"><Icon name="material-symbols:close" size="1rem"/></Button>
+          <Button class="text-red-500 p-1 m-0 cursor-pointer" variant="destructive" @click="userStore.removeLineFavorite(lineId)"><Icon name="material-symbols:close" size="1rem"/></Button>
         </CardContent>
       </Card>
       <Card v-if="userStore.lineFavorites.length === 0">

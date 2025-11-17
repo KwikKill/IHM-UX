@@ -13,23 +13,23 @@
         </div>
 
         <!-- Filters -->
-        <div class="md:col-span-1 lg:col-span-1 flex flex-col gap-4 flex-1">
-            <Card class="md:col-span-1 lg:col-span-1 p-4 flex flex-col gap-4">
-                <CardHeader class="px-0">
-                    <div class="mb-2 px-6">
-                        <CardTitle class="text-2xl font-bold">Filtres</CardTitle>
-                    </div>
-                    <Separator class="bg-border" />
-                </CardHeader>
+        <div class="md:col-span-1 lg:col-span-1 p-4 flex flex-col gap-4">
+        <Card class="">
+            <CardHeader class="px-0">
+                <div class="mb-2 px-6">
+                    <CardTitle class="text-2xl font-bold">Filtres</CardTitle>
+                </div>
+                <Separator class="bg-border" />
+            </CardHeader>
 
-                <CardContent class="flex flex-col gap-3 px-2">
-                    <div class="flex items-start gap-2">
-                        <Checkbox id="pmrFilter" v-model="pmrFilter" />
-                        <div class="text-sm">
-                            <label for="pmrFilter" class="block font-medium">Accessible mobilité réduite</label>
-                            <span class="text-xs text-muted-foreground">Afficher uniquement les arrêts accessibles</span>
-                        </div>
+            <CardContent class="flex flex-col gap-3 px-2">
+                <div class="flex items-start gap-2">
+                    <Checkbox id="pmrFilter" v-model="pmrFilter" class="border-white cursor-pointer" />
+                    <div class="text-sm">
+                        <label for="pmrFilter" class="block font-medium">Accessible mobilité réduite</label>
+                        <span class="text-xs text-muted-foreground">Afficher uniquement les arrêts accessibles</span>
                     </div>
+                </div>
 
                     <div>
                         <label class="block text-xs mb-1">Type d'arrêt :</label>
