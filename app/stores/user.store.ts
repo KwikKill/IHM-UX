@@ -28,6 +28,13 @@ export const useUserStore = defineStore('userStore', {
     removeLineFavorite(lineId: string) {
         this.lineFavorites = this.lineFavorites.filter(id => id !== lineId)
     },
+    toggleStopFavorite(stopId: string) {
+      if (this.stopFavorites.includes(stopId)) {
+        this.removeStopFavorite(stopId)
+      } else {
+        this.addStopFavorite(stopId)
+      }
+    }
   },
   persist: true,
 })

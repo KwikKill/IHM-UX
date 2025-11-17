@@ -46,11 +46,21 @@
                                 </p>
                             </div>
                         </div>
-
-                        <div class="bg-primary text-white rounded-full px-3 py-1 text-sm font-semibold">
-                            4m
+                        <div class="flex items-center gap-2">
+                            <div class="bg-primary text-white rounded-full px-3 py-1 text-sm font-semibold">
+                                4m
+                            </div>
+                            <Button class="ml-2" @click="userStore.toggleStopFavorite(item.idarret)">
+                                <span v-if="userStore.stopFavorites && userStore.stopFavorites.includes(item.idarret)">
+                                    ★
+                                </span>
+                                <span v-else>
+                                    ☆
+                                </span>
+                            </Button>
                         </div>
                     </div>
+                            
 
                     <!-- Empty state -->
                     <div v-if="filteredBuses.length === 0" class="py-12">
@@ -173,6 +183,8 @@ import SelectTrigger from '~/components/ui/select/SelectTrigger.vue'
 import SelectValue from '~/components/ui/select/SelectValue.vue'
 import SelectContent from '~/components/ui/select/SelectContent.vue'
 import SelectItem from '~/components/ui/select/SelectItem.vue'
+
+const userStore = useUserStore()
 
 const dataStore = useDataStore()
 const searchQuery = ref('')
