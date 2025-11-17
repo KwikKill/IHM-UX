@@ -2,7 +2,7 @@ export const useUserStore = defineStore('userStore', {
   state: () => ({
     loggedIn: false,
     username: '',
-    stopFavorites: ["6-2243"] as string[],
+    stopFavorites: ["6-1047"] as string[],
     lineFavorites: ["0006"] as string[],
   }),
   actions: {

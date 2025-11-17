@@ -13,23 +13,23 @@
         </div>
 
         <!-- Filters -->
-        <div class="md:col-span-1 lg:col-span-1 p-4 flex flex-col gap-4">
-        <Card class="">
-            <CardHeader class="px-0">
-                <div class="mb-2 px-6">
-                    <CardTitle class="text-2xl font-bold">Filtres</CardTitle>
-                </div>
-                <Separator class="bg-border" />
-            </CardHeader>
-
-            <CardContent class="flex flex-col gap-3 px-2">
-                <div class="flex items-start gap-2">
-                    <Checkbox id="pmrFilter" v-model="pmrFilter" class="border-white cursor-pointer" />
-                    <div class="text-sm">
-                        <label for="pmrFilter" class="block font-medium">Accessible mobilité réduite</label>
-                        <span class="text-xs text-muted-foreground">Afficher uniquement les arrêts accessibles</span>
+        <div class="md:col-span-1 lg:col-span-1 flex flex-col gap-4">
+            <Card class="">
+                <CardHeader class="px-0">
+                    <div class="mb-2 px-6">
+                        <CardTitle class="text-2xl font-bold">Filtres</CardTitle>
                     </div>
-                </div>
+                    <Separator class="bg-border" />
+                </CardHeader>
+
+                <CardContent class="flex flex-col gap-3 px-2">
+                    <div class="flex items-start gap-2">
+                        <Checkbox id="pmrFilter" v-model="pmrFilter" class="border-white cursor-pointer" />
+                        <div class="text-sm">
+                            <label for="pmrFilter" class="block font-medium">Accessible mobilité réduite</label>
+                            <span class="text-xs text-muted-foreground">Afficher uniquement les arrêts accessibles</span>
+                        </div>
+                    </div>
 
                     <div>
                         <label class="block text-xs mb-1">Type d'arrêt :</label>
@@ -137,7 +137,10 @@
                         </div>
                     </div>
 
-                    <div class="pt-3 flex justify-end">
+                    <div class="pt-3 flex justify-between">
+                        <Button @click="addToFavorites">
+                            Ajouter aux favoris
+                        </Button>
                         <Button @click="closeModal">Fermer</Button>
                     </div>
                 </div>
@@ -166,6 +169,7 @@ import CardTitle from '~/components/ui/card/CardTitle.vue'
 import CardContent from '~/components/ui/card/CardContent.vue'
 
 const dataStore = useDataStore()
+const userStore = useUserStore()
 
 // Filters (same as search.vue)
 const searchQuery = ref('')
@@ -185,13 +189,6 @@ const uniqueLines = computed(() => {
 
     return Array.from(new Set(lines)).sort((a, b) => Number(a.idligne.toString()) - Number(b.idligne.toString()))
 })
-
-/*function getLineColor(id: string) {
-    const line = dataStore.getBusByLineId(String(id))
-    const record = line as unknown as Record<string, unknown>
-    const c = record?.['color']
-    return typeof c === 'string' ? c : '#7c3aed'
-}*/
 
 // Map state
 let L: typeof import('leaflet') | null = null
@@ -239,20 +236,17 @@ const stopBuses = computed(() => {
     return Array.from(uniqueMap.values())
 })
 
-/*function timeToNow(timeStr: string | undefined) {
-    if (!timeStr) return '—'
-    try {
-        const t = new Date(timeStr)
-        const diff = Math.max(0, Math.floor((t.getTime() - Date.now()) / 60000))
-        return diff <= 0 ? '0m' : `${diff}m`
-    } catch {
-        return timeStr
-    }
-}*/
-
 function closeModal() {
     showModal.value = false
     selectedStop.value = null
+}
+
+function addToFavorites() {
+    if (selectedStop.value) {
+        if (!userStore.stopFavorites.includes(selectedStop.value.id)) {
+            userStore.addStopFavorite(selectedStop.value.stop_id)
+        }
+    }
 }
 
 // Initialize Leaflet map on client
