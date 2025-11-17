@@ -50,12 +50,12 @@
                             <div class="bg-primary text-white rounded-full px-3 py-1 text-sm font-semibold">
                                 4m
                             </div>
-                            <Button class="ml-2" @click="userStore.toggleStopFavorite(item.idarret)">
+                            <Button class="ml-2 *:flex *:items-center" @click="userStore.toggleStopFavorite(item.idarret)">
                                 <span v-if="userStore.stopFavorites && userStore.stopFavorites.includes(item.idarret)">
-                                    ★
+                                    <Icon name="material-symbols:star" size="1.2rem" class="text-yellow-400"/>
                                 </span>
                                 <span v-else>
-                                    ☆
+                                    <Icon name="material-symbols:star-outline" size="1.2rem" class="text-gray-400"/>
                                 </span>
                             </Button>
                         </div>
