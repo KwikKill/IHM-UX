@@ -95,7 +95,7 @@
 
             <CardContent class="flex flex-col gap-3 px-2">
                 <div class="flex items-start gap-2">
-                    <Checkbox id="pmrFilter" v-model="pmrFilter" />
+                    <Checkbox id="pmrFilter" v-model="pmrFilter" class="border-white"/>
                     <div class="text-sm">
                         <label for="pmrFilter" class="block font-medium">Accessible mobilité réduite</label>
                         <span class="text-xs text-muted-foreground">Afficher uniquement les arrêts accessibles</span>

@@ -131,8 +131,8 @@
                     </div>
 
                     <div class="pt-3 flex justify-between">
-                        <Button @click="addToFavorites">
-                            Ajouter aux favoris
+                        <Button @click="userStore.toggleStopFavorite(selectedStop.stop_id)">
+                            {{ userStore.stopFavorites.includes(selectedStop?.stop_id || '') ? 'Retirer des favoris' : 'Ajouter aux favoris' }}
                         </Button>
                         <Button @click="closeModal">Fermer</Button>
                     </div>
@@ -232,14 +232,6 @@ const stopBuses = computed(() => {
 function closeModal() {
     showModal.value = false
     selectedStop.value = null
-}
-
-function addToFavorites() {
-    if (selectedStop.value) {
-        if (!userStore.stopFavorites.includes(selectedStop.value.id)) {
-            userStore.addStopFavorite(selectedStop.value.stop_id)
-        }
-    }
 }
 
 // Initialize Leaflet map on client

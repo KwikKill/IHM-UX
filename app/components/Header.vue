@@ -22,14 +22,15 @@
             <!-- Desktop User Section -->
             <div class="hidden md:flex items-center gap-3 text-sm text-foreground relative">
                 <template v-if="userStore.loggedIn">
-                    <button
-                        class="flex items-center gap-2 hover:text-primary transition-colors"
+                    <Button
+                        class="flex items-center gap-2 text-white hover:text-primary transition-colors justify-center bg-transparent hover:bg-transparent"
+                        type="button"
                         @click="toggleDropdown"
                     >
                         <Icon name="mdi:account-circle" class="w-12 h-12 text-foreground" />
                         <span class="font-medium">{{ userStore.username }}</span>
                         <Icon name="mdi:chevron-down" class="w-4 h-4 text-muted-foreground"/>
-                    </button>
+                    </Button>
 
                     <!-- Dropdown -->
                     <transition name="slide-fade">

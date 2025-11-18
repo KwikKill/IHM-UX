@@ -1,6 +1,6 @@
 <template>
     <main class="flex items-center justify-center min-h-screen p-6" role="main" aria-labelledby="privacy-title">
-        <div class="flex md:w-full justify-center">
+        <div class="flex md:w-[70vw] justify-center">
             <Card class="flex p-8 rounded-lg shadow-md gap-4">
                 <h1 id="privacy-title" class="text-3xl font-semibold">Politique de confidentialité</h1>
 
