@@ -1,6 +1,11 @@
 import { sortLines } from "~/lib/utils"
 import type { NextBus, BusStops, BusTopology, NetworkData, TrafficData, BusInfo } from "~/models/models"
-import { fakeNextBus, fakeBusStops, fakeBusTopology, fakeNetworkData, fakeTrafficData, fakeBusInfo } from "~/stores/fake_data"
+import { fakeNextBus } from "./fake_data/fake_data_next_bus"
+import { fakeBusStops } from "./fake_data/fake_data_bus_stop"
+import { fakeBusTopology } from "./fake_data/fake_data_bus_topology"
+import { fakeNetworkData } from "./fake_data/fake_data_network"
+import { fakeTrafficData } from "./fake_data/fake_data_traffic"
+import { fakeBusInfo } from "./fake_data/fake_data_bus_info"
 
 interface DataState {
   loading: boolean
@@ -28,7 +33,7 @@ export const useDataStore = defineStore('dataStore', {
     async fetchData<T = NextBus | BusStops | BusTopology | NetworkData | TrafficData>(initialUrl: string, full: boolean = false): Promise<T[]> {
       const limit = 100
       let offset = 0
-      let total = 3000
+      let total = 6000
       const data: T[] = []
 
       try {
