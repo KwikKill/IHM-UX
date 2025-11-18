@@ -155,7 +155,7 @@
                             >
                                 <div class="flex items-center">
                                             <img
-                                                :src="line.image?.url"
+                                                :src="`/pictos/${line.idligne}.png`"
                                                 :alt="`Logo de la ligne ${line.nomcourtligne}`"
                                                 class="inline h-5 w-5 mr-2 object-contain"
                                             >
