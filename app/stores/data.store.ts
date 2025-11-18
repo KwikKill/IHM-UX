@@ -146,6 +146,14 @@ export const useDataStore = defineStore('dataStore', {
       return this.busTopology.find(stop => stop.id === stopId)
     },
 
+    getBusStopsByIdMap(): Record<string, BusTopology> {
+      const map: Record<string, BusTopology> = {}
+      this.busTopology.forEach(stop => {
+        map[stop.id] = stop
+      })
+      return map
+    },
+
     getStopById(stopId: string): BusTopology | undefined {
       return this.busTopology.find(stop => stop.stop_id === stopId)
     },

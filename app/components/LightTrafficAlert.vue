@@ -27,7 +27,7 @@
                             :alt="`Logo ligne ${alert.nomcourtligne}`" class="rounded-md object-contain"
                         >
                         <div
-                            class="absolute top-0 right-0 text-white text-xs font-bold rounded-full 2xl:size-5 md:size-3 size-5 flex items-center justify-center"
+                            class="absolute -top-1 -right-1 text-white text-xs font-bold rounded-full 2xl:size-5 md:size-3 size-5 flex items-center justify-center"
                             :class="{
                                 'bg-red-600': alert.niveau.includes('Majeure'),
                                 'bg-orange-500': alert.niveau.includes('Bloquante') && !alert.niveau.includes('Majeure'),

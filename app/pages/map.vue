@@ -132,7 +132,7 @@
                             </div>
 
                             <div class="bg-primary text-white rounded-full px-3 py-1 text-sm font-semibold">
-                                4m
+                                {{ Math.max(0, Math.round((new Date(item.arrivee).getTime() - Date.now()) / 60000)) }}m
                             </div>
                         </div>
                     </div>

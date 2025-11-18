@@ -48,7 +48,7 @@
                         </div>
                         <div class="flex items-center gap-2">
                             <div class="bg-primary text-white rounded-full px-3 py-1 text-sm font-semibold">
-                                4m
+                                {{ Math.max(0, Math.round((new Date(item.arrivee).getTime() - Date.now()) / 60000)) }}m
                             </div>
                             <Button class="ml-2 *:flex *:items-center" @click="userStore.toggleStopFavorite(item.idarret)">
                                 <span v-if="userStore.stopFavorites && userStore.stopFavorites.includes(item.idarret)">
@@ -211,25 +211,77 @@ const uniqueLines = computed(() => {
 
 // --- Filtered buses ---
 const filteredBuses = computed(() => {
-    return dataStore.nextBus.filter(bus => {
-        // basic text / line filter
-        const matchesText = bus.nomarret.toLowerCase().includes(searchQuery.value.toLowerCase()) || bus.idligne.toString().includes(searchQuery.value)
-        const matchesLine = lineFilter.value === 'all' || bus.idligne.toString() === lineFilter.value
+    const coordLat = 48.12273534554845
+    const coordLon = -1.6358534397204592
+    const q = searchQuery.value.toLowerCase()
+    const line = lineFilter.value
+    const pmr = pmrFilter.value
+    const type = stopType.value
+    const prec = precision.value
 
-        // optional PMR filter: if pmrFilter is true, require bus.pmr === true (guard when field missing)
-        const busRecord = bus
-        const matchesPmr = !pmrFilter.value || dataStore.getBusStopById(busRecord.idarret)?.estaccessiblepmr === "true"
+    // Cache local des arrêts
+    const stops = dataStore.getBusStopsByIdMap()
 
-        // optional stop type filter (guard when field missing)
-        const matchesType = stopType.value === 'all' || (dataStore.getBusStopById(busRecord.idarret)?.mobilier === stopType.value)
+    // Stocke bus + distance pour trier
+    const result = []
 
-        // optional precision filter: if precision is not 'all', require bus.precision === precision.value (guard when field missing)
-        const busPrecision = busRecord.precision
-        const matchesPrecision = precision.value === 'all' || (typeof busPrecision === 'string' && busPrecision === precision.value)
+    for (const bus of dataStore.nextBus) {
+        const stop = stops[bus.idarret]
+        if (!stop) continue
 
-        return matchesText && matchesLine && matchesPmr && matchesType && matchesPrecision
+        // ---- FILTRES ----
+        if (q && !(
+            bus.nomarret.toLowerCase().includes(q) ||
+            bus.idligne.toString().includes(q)
+        )) continue
+
+        if (line !== 'all' && bus.idligne.toString() !== line) continue
+
+        if (pmr && stop.estaccessiblepmr !== "true") continue
+
+        if (type !== 'all' && stop.mobilier !== type) continue
+
+        if (prec !== 'all' && bus.precision !== prec) continue
+
+
+        // ---- DISTANCE (quadratique) ----
+        const dx = stop.coordonnees.lat - coordLat
+        const dy = stop.coordonnees.lon - coordLon
+        const dist2 = dx * dx + dy * dy
+
+        // Préparation tri
+        result.push({
+            bus,
+            dist2,
+            stop,
+            // conversion date -> timestamp (rapide)
+            arrivalTs: bus.arrivee ? Date.parse(bus.arrivee) : Infinity
+        })
+    }
+
+    // ---- TRI : distance -> puis heure arrivée ----
+    result.sort((a, b) => {
+        // 1) Tri par distance
+        if (a.dist2 !== b.dist2)
+            return a.dist2 - b.dist2
+
+        // 2) Tri par heure d’arrivée si même direction + même arrêt + même ligne
+        const sameLine = a.bus.idligne === b.bus.idligne
+        const sameDirection = a.bus.sens === b.bus.sens
+        const sameStop = a.bus.idarret === b.bus.idarret
+
+        if (sameLine && sameDirection && sameStop) {
+            return a.arrivalTs - b.arrivalTs
+        }
+
+        // Sinon, ne change rien
+        return 0
     })
+
+    return result.map(r => r.bus)
 })
+
+
 
 // --- Pagination logic ---
 const totalPages = computed(() => Math.ceil(filteredBuses.value.length / pageSize))
