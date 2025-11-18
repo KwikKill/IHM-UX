@@ -112,13 +112,6 @@
                             class="py-2 flex items-center bg-secondary rounded-md px-4 gap-3 justify-between"
                         >
                             <div class="flex items-center gap-3">
-                                <div
-                                    class="flex items-center justify-center h-8 w-8 rounded-md text-sm font-bold text-white shadow"
-                                    :style="{ backgroundColor: '#7c3aed' }"
-                                >
-                                    {{ dataStore.getBusByLineId(item.idligne)?.nomcourtligne }}
-                                </div>
-
                                 <div class="flex items-center">
                                     <img
                                         :src="dataStore.getBusByLineId(item.idligne)?.image.url"

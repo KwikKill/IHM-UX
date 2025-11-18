@@ -28,13 +28,6 @@
                         class="py-2 flex items-center bg-secondary rounded-md px-4 gap-3 justify-between"
                     >
                         <div class="flex items-center gap-3">
-                            <div
-                                class="flex items-center justify-center h-8 w-8 rounded-md text-sm font-bold text-white shadow"
-                                :style="{ backgroundColor: '#7c3aed' }"
-                            >
-                                {{ dataStore.getBusByLineId(item.idligne)?.nomcourtligne }}
-                            </div>
-
                             <div class="flex items-center">
                                 <img
                                     :src="`/pictos/${item.idligne}.png`"
@@ -278,7 +271,18 @@ const filteredBuses = computed(() => {
         return 0
     })
 
-    return result.map(r => r.bus)
+    // Only keep one bus per line + direction + stop
+    const seen = new Set()
+    const filteredResult = []
+    for (const item of result) {
+        const key = `${item.bus.idligne}-${item.bus.sens}-${item.bus.idarret}`
+        if (!seen.has(key)) {
+            seen.add(key)
+            filteredResult.push(item)
+        }
+    }
+
+    return filteredResult.map(item => item.bus)
 })
 
 
