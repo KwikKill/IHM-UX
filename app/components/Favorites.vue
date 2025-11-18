@@ -18,7 +18,11 @@
       <h2 class="font-semibold mt-4">Lignes favorites</h2>
       <Card v-for="lineId in userStore.lineFavorites" :key="lineId" class="mb-2">
         <CardContent class="flex justify-between">
-          <div>Ligne {{ dataStore.getBusByLineId(lineId)?.nomcourtligne }}</div>
+          <img 
+            :src="`/pictos/${lineId}.png`"
+            :alt="`Logo de la ligne ${dataStore.getBusByLineId(lineId)?.nomcourtligne}`"
+            class="inline h-7 w-7 mr-2 object-contain"
+          >
           <Button class="text-red-500 p-1 m-0 cursor-pointer" variant="destructive" @click="userStore.removeLineFavorite(lineId)"><Icon name="material-symbols:close" size="1rem"/></Button>
         </CardContent>
       </Card>

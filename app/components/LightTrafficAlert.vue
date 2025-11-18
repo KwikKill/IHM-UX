@@ -9,7 +9,7 @@
             <Separator class="bg-border" />
         </CardHeader>
         <CardContent>
-            <div v-if="dataStore.trafficData.length > 0" class="grid xl:grid-cols-5 lg:grid-cols-4 grid-cols-3 gap-2">
+            <div v-if="dataStore.trafficData.length > 0" class="grid xl:grid-cols-5 lg:grid-cols-4 grid-cols-5 gap-2">
                 <NuxtLink
                     v-for="alert in getData()"
                     :key="alert.idperturbation"

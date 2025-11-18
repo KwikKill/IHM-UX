@@ -8,7 +8,7 @@
         <!-- Map -->
         <div class="md:col-span-2 lg:col-span-3 flex flex-col gap-4 flex-1">
             <Card class="flex-1 p-0">
-                <div id="leaflet-map" class="flex-1 h-full w-full rounded-md" />
+                <div id="leaflet-map" class="flex-1 w-full min-h-dvh rounded-md" />
             </Card>
         </div>
 
