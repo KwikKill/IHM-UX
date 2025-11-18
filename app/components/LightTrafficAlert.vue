@@ -23,7 +23,7 @@
                         class="relative p-2"
                     >
                         <img
-                            :src="dataStore.getBusByLineId(alert.idligne)?.image.url"
+                            :src="`/pictos/${alert.idligne}.png`"
                             :alt="`Logo ligne ${alert.nomcourtligne}`" class="h-12 w-12 rounded-md object-contain"
                         >
                         <div

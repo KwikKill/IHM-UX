@@ -37,7 +37,7 @@
 
                             <div class="flex items-center">
                                 <img
-                                    :src="dataStore.getBusByLineId(item.idligne)?.image.url"
+                                    :src="`/pictos/${item.idligne}.png`"
                                     :alt="`Logo de la ligne ${dataStore.getBusByLineId(item.idligne)?.nomcourtligne}`"
                                     class="inline h-7 w-7 mr-2 object-contain"
                                 >
