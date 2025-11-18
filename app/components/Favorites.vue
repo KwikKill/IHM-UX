@@ -1,6 +1,6 @@
 <template>
   <Card class="p-4 flex-1">
-    <CardTitle>Favoris</CardTitle>
+    <CardTitle>Vos favoris</CardTitle>
     <CardContent class="flex flex-col gap-1">
       <h2 class="font-semibold mt-2">Arrêts favoris</h2>
       <Card v-for="stopId in userStore.stopFavorites" :key="stopId" class="mb-2">
