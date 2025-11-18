@@ -1,5 +1,5 @@
 <template>
-    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 p-3">
+    <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-4 p-3">
         <!-- Traffic alert -->
         <LightTrafficAlert class="md:col-span-1 lg:col-span-1 hidden md:flex" />
 

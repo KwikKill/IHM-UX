@@ -9,7 +9,7 @@
             <Separator class="bg-border" />
         </CardHeader>
         <CardContent>
-            <div v-if="dataStore.trafficData.length > 0" class="grid grid-cols-5 gap-2">
+            <div v-if="dataStore.trafficData.length > 0" class="grid xl:grid-cols-5 lg:grid-cols-4 grid-cols-3 gap-2">
                 <NuxtLink
                     v-for="alert in getData()"
                     :key="alert.idperturbation"
@@ -20,14 +20,14 @@
                     noreferrer
                 >
                     <div
-                        class="relative p-2"
+                        class="relative"
                     >
                         <img
                             :src="`/pictos/${alert.idligne}.png`"
-                            :alt="`Logo ligne ${alert.nomcourtligne}`" class="h-12 w-12 rounded-md object-contain"
+                            :alt="`Logo ligne ${alert.nomcourtligne}`" class="rounded-md object-contain"
                         >
                         <div
-                            class="absolute top-0 right-0 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center"
+                            class="absolute top-0 right-0 text-white text-xs font-bold rounded-full 2xl:size-5 md:size-3 size-5 flex items-center justify-center"
                             :class="{
                                 'bg-red-600': alert.niveau.includes('Majeure'),
                                 'bg-orange-500': alert.niveau.includes('Bloquante') && !alert.niveau.includes('Majeure'),
