@@ -1,12 +1,6 @@
 import { sortLines } from "~/lib/utils"
 import type { NextBus, BusStops, BusTopology, NetworkData, TrafficData, BusInfo, ItineraryRaw, Itinerary, ItinerarySegment } from "~/models/models"
-import { fakeNextBus } from "./fake_data/fake_data_next_bus"
-import { fakeBusStops } from "./fake_data/fake_data_bus_stop"
-import { fakeBusTopology } from "./fake_data/fake_data_bus_topology"
-import { fakeNetworkData } from "./fake_data/fake_data_network"
-import { fakeTrafficData } from "./fake_data/fake_data_traffic"
-import { fakeBusInfo } from "./fake_data/fake_data_bus_info"
-import { fakeItineraries } from "./fake_data/fake_data_itineraries"
+// Fake data modules are imported dynamically inside each fetchX when `fake` is true
 
 interface DataState {
   loading: boolean
@@ -37,8 +31,14 @@ export const useDataStore = defineStore('dataStore', {
     // Fetch itineraries (lines geometry + color) and process into segments usable by Leaflet
     async fetchItineraries(fake: boolean = false): Promise<void> {
       if (fake) {
-        // use provided fake itineraries (already in processed format)
-        this.itineraries = fakeItineraries
+        try {
+          const res = await fetch('/fake_data/fake_data_itineraries.json')
+          if (!res.ok) throw new Error(`Failed to load fake itineraries: ${res.status}`)
+          this.itineraries = (await res.json()) as Itinerary[]
+        } catch (err) {
+          console.error('fetchItineraries (fake) error:', err)
+          this.itineraries = []
+        }
         return
       }
       const initialUrl = 'https://data.rennesmetropole.fr/api/explore/v2.1/catalog/datasets/star_itineraires_actifs/records'
@@ -122,7 +122,8 @@ export const useDataStore = defineStore('dataStore', {
 
     async fetchNextBuses(fake: boolean = false): Promise<void> {
       if (fake) {
-        this.nextBus = fakeNextBus
+        const mod = await import("./fake_data/fake_data_next_bus")
+        this.nextBus = (mod.fakeNextBus ?? []) as NextBus[]
         return
       }
       const initialUrl = 'https://data.rennesmetropole.fr/api/explore/v2.1/catalog/datasets/prochains-passages-des-lignes-de-bus-du-reseau-star-en-temps-reel/records'
@@ -131,7 +132,14 @@ export const useDataStore = defineStore('dataStore', {
 
     async fetchBusStops(fake: boolean = false): Promise<void> {
       if (fake) {
-        this.busStops = fakeBusStops
+        try {
+          const res = await fetch('/fake_data/fake_data_bus_stop.json')
+          if (!res.ok) throw new Error(`Failed to load fake bus stops: ${res.status}`)
+          this.busStops = (await res.json()) as BusStops[]
+        } catch (err) {
+          console.error('fetchBusStops (fake) error:', err)
+          this.busStops = []
+        }
         return
       }
       const initialUrl = 'https://data.rennesmetropole.fr/api/explore/v2.1/catalog/datasets/tco-bus-topologie-dessertes-td/records'
@@ -140,7 +148,14 @@ export const useDataStore = defineStore('dataStore', {
 
     async fetchBusTopology(fake: boolean = false): Promise<void> {
       if (fake) {
-        this.busTopology = fakeBusTopology
+        try {
+          const res = await fetch('/fake_data/fake_data_bus_topology.json')
+          if (!res.ok) throw new Error(`Failed to load fake bus topology: ${res.status}`)
+          this.busTopology = (await res.json()) as BusTopology[]
+        } catch (err) {
+          console.error('fetchBusTopology (fake) error:', err)
+          this.busTopology = []
+        }
         return
       }
       const initialUrl = 'https://data.rennesmetropole.fr/api/explore/v2.1/catalog/datasets/topologie-des-points-darret-de-bus-du-reseau-star/records'
@@ -149,7 +164,14 @@ export const useDataStore = defineStore('dataStore', {
 
     async fetchNetworkData(fake: boolean = false): Promise<void> {
       if (fake) {
-        this.networkData = fakeNetworkData
+        try {
+          const res = await fetch('/fake_data/fake_data_network.json')
+          if (!res.ok) throw new Error(`Failed to load fake network data: ${res.status}`)
+          this.networkData = (await res.json()) as NetworkData[]
+        } catch (err) {
+          console.error('fetchNetworkData (fake) error:', err)
+          this.networkData = []
+        }
         return
       }
       const initialUrl = 'https://data.rennesmetropole.fr/api/explore/v2.1/catalog/datasets/horaires-et-plans-du-reseau-star-au-format-pdf/records'
@@ -158,7 +180,14 @@ export const useDataStore = defineStore('dataStore', {
 
     async fetchTrafficData(fake: boolean = false): Promise<void> {
       if (fake) {
-        this.trafficData = fakeTrafficData.sort(sortLines)
+        try {
+          const res = await fetch('/fake_data/fake_data_traffic.json')
+          if (!res.ok) throw new Error(`Failed to load fake traffic data: ${res.status}`)
+          this.trafficData = ((await res.json()) as TrafficData[]).sort(sortLines)
+        } catch (err) {
+          console.error('fetchTrafficData (fake) error:', err)
+          this.trafficData = []
+        }
         return
       }
       const initialUrl = 'https://data.rennesmetropole.fr/api/explore/v2.1/catalog/datasets/alertes-trafic-en-temps-reel-sur-les-lignes-du-reseau-star/records'
@@ -169,7 +198,14 @@ export const useDataStore = defineStore('dataStore', {
 
     async fetchBusInfo(fake: boolean = false): Promise<void> {
       if (fake) {
-        this.busInfo = fakeBusInfo
+        try {
+          const res = await fetch('/fake_data/fake_data_bus_info.json')
+          if (!res.ok) throw new Error(`Failed to load fake bus info: ${res.status}`)
+          this.busInfo = (await res.json()) as BusInfo[]
+        } catch (err) {
+          console.error('fetchBusInfo (fake) error:', err)
+          this.busInfo = []
+        }
         return
       }
       const initialUrl = 'https://data.rennesmetropole.fr/api/explore/v2.1/catalog/datasets/pictogrammes-des-lignes-de-bus-du-reseau-star/records'

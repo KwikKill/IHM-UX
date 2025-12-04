@@ -6,6 +6,7 @@
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
+    "generate:mem": "NODE_OPTIONS=--max_old_space_size=16384 nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
