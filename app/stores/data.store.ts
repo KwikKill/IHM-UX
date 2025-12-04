@@ -1,11 +1,12 @@
 import { sortLines } from "~/lib/utils"
-import type { NextBus, BusStops, BusTopology, NetworkData, TrafficData, BusInfo } from "~/models/models"
+import type { NextBus, BusStops, BusTopology, NetworkData, TrafficData, BusInfo, ItineraryRaw, Itinerary, ItinerarySegment } from "~/models/models"
 import { fakeNextBus } from "./fake_data/fake_data_next_bus"
 import { fakeBusStops } from "./fake_data/fake_data_bus_stop"
 import { fakeBusTopology } from "./fake_data/fake_data_bus_topology"
 import { fakeNetworkData } from "./fake_data/fake_data_network"
 import { fakeTrafficData } from "./fake_data/fake_data_traffic"
 import { fakeBusInfo } from "./fake_data/fake_data_bus_info"
+import { fakeItineraries } from "./fake_data/fake_data_itineraries"
 
 interface DataState {
   loading: boolean
@@ -15,6 +16,7 @@ interface DataState {
   networkData: NetworkData[]
   trafficData: TrafficData[]
   busInfo: BusInfo[]
+  itineraries: Itinerary[]
   tosUpdated: string
 }
 
@@ -27,9 +29,60 @@ export const useDataStore = defineStore('dataStore', {
     networkData: [],
     trafficData: [],
     busInfo: [],
+      itineraries: [],
     tosUpdated: "24 octobre 2025"
   }),
   actions: {
+    
+    // Fetch itineraries (lines geometry + color) and process into segments usable by Leaflet
+    async fetchItineraries(fake: boolean = false): Promise<void> {
+      if (fake) {
+        // use provided fake itineraries (already in processed format)
+        this.itineraries = fakeItineraries
+        return
+      }
+      const initialUrl = 'https://data.rennesmetropole.fr/api/explore/v2.1/catalog/datasets/star_itineraires_actifs/records'
+      try {
+        const raw = await this.fetchData<ItineraryRaw>(initialUrl, true)
+
+        const processed: Itinerary[] = raw.map((r: ItineraryRaw) => {
+          const coords = (r.geo_shape && r.geo_shape.geometry && (r.geo_shape.geometry.coordinates as unknown)) as unknown
+          const segments: ItinerarySegment[] = []
+
+          if (Array.isArray(coords)) {
+            // coords is expected to be MultiLineString: array of LineStrings
+            for (const line of coords as unknown as number[][][]) {
+              if (!Array.isArray(line)) continue
+              const seg: ItinerarySegment = []
+              for (const pt of line) {
+                if (!Array.isArray(pt) || pt.length < 2) continue
+                const lon = Number(pt[0])
+                const lat = Number(pt[1])
+                if (Number.isFinite(lat) && Number.isFinite(lon)) {
+                  seg.push({ lat, lon })
+                }
+              }
+              if (seg.length > 0) segments.push(seg)
+            }
+          }
+
+          return {
+            id: r.id ?? r.gml_id ?? '',
+            code: (r.iti_code as string) ?? undefined,
+            name: (r.iti_nom as string) ?? undefined,
+            li_num: (r.li_num as string) ?? (r.li_code as string) ?? undefined,
+            color: (r.li_couleur_hex as string) ?? '#000000',
+            segments
+          }
+        })
+
+        this.itineraries = processed
+      } catch (error) {
+        console.error('fetchItineraries error:', error)
+        this.itineraries = []
+      }
+    },
+
     async fetchData<T = NextBus | BusStops | BusTopology | NetworkData | TrafficData>(initialUrl: string, full: boolean = false): Promise<T[]> {
       const limit = 100
       let offset = 0
@@ -166,6 +219,7 @@ export const useDataStore = defineStore('dataStore', {
         networkData: this.networkData,
         trafficData: this.trafficData,
         busInfo: this.busInfo,
+        itineraries: this.itineraries,
         tosUpdated: this.tosUpdated
       }
       return JSON.stringify(data, null, 2)

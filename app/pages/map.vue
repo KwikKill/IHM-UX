@@ -87,6 +87,15 @@
                             </SelectContent>
                         </Select>
                     </div>
+                    <div class="pt-2">
+                        <div class="flex items-start gap-2">
+                            <Checkbox id="favoritesToggle" v-model="showOnlyFavorites" class="border-white cursor-pointer" />
+                            <div class="text-sm">
+                                <label for="favoritesToggle" class="block font-medium">Afficher uniquement mes lignes favorites</label>
+                                <span class="text-xs text-muted-foreground">Masquer toutes les lignes sauf celles en favoris</span>
+                            </div>
+                        </div>
+                    </div>
                 </CardContent>
             </Card>
             <Favorites />
@@ -131,7 +140,7 @@
                     </div>
 
                     <div class="pt-3 flex justify-between">
-                        <Button @click="userStore.toggleStopFavorite(selectedStop.stop_id)">
+                        <Button @click="() => userStore.toggleStopFavorite(selectedStop?.stop_id || '')">
                             {{ userStore.stopFavorites.includes(selectedStop?.stop_id || '') ? 'Retirer des favoris' : 'Ajouter aux favoris' }}
                         </Button>
                         <Button @click="closeModal">Fermer</Button>
@@ -140,6 +149,8 @@
             </div>
         </div>
     </div>
+
+    <!-- Legend removed — only favorites shown by default (toggle in filters remains) -->
 </template>
 
 <script setup lang="ts">
@@ -187,6 +198,11 @@ const uniqueLines = computed(() => {
 let L: typeof import('leaflet') | null = null
 let map: LeafletTypes.Map | null = null
 let markersLayer: LeafletTypes.LayerGroup | null = null
+let linesLayer: LeafletTypes.LayerGroup | null = null
+let linesById: Record<string, LeafletTypes.LayerGroup> = {}
+
+const showOnlyFavorites = ref(true)
+const visibleLines = ref<Record<string, boolean>>({})
 
 const showModal = ref(false)
 const selectedStop = ref<BusTopology | null>(null)
@@ -260,13 +276,155 @@ onMounted(async () => {
     }).addTo(map)
 
     markersLayer = L.layerGroup().addTo(map)
+    linesLayer = L.layerGroup().addTo(map)
     updateMarkers()
 
     // update when data or filters change
     watch([() => dataStore.busTopology, filteredStops, lineFilter, pmrFilter, stopType, precision, searchQuery], () => {
         nextTick(() => updateMarkers())
     })
+
+    // redraw lines when itineraries change (run immediately in case data was fetched before mount)
+    watch(() => dataStore.itineraries, () => {
+        // initialize per-line visibility defaults
+        const itins = dataStore.itineraries ?? []
+        for (const it of itins) {
+            const key = it.li_num ?? it.code ?? it.id
+            if (!(key in visibleLines.value)) visibleLines.value[key] = true
+        }
+        nextTick(() => drawItineraries())
+    }, { immediate: true })
 })
+
+// watch toggles
+// when the favorites-only toggle changes, redraw itineraries
+watch(showOnlyFavorites, () => {
+    nextTick(() => drawItineraries())
+})
+
+watch(visibleLines, (newVal) => {
+    if (!map) return
+    for (const k in linesById) {
+        const should = !!newVal[k]
+        const layer = linesById[k]
+        if (!layer) continue
+        const has = map.hasLayer ? map.hasLayer(layer as any) : false
+        if (should && !has) {
+            try { layer.addTo(map) } catch {}
+        } else if (!should && has) {
+            try { map.removeLayer(layer) } catch {}
+        }
+    }
+}, { deep: true })
+
+const uniqueItineraries = computed(() => {
+    const itins = dataStore.itineraries ?? []
+    const map: Record<string, any> = {}
+    for (const it of itins) {
+        const key = it.li_num ?? it.code ?? it.id
+        if (!map[key]) {
+            map[key] = {
+                key,
+                li_num: it.li_num,
+                name: it.li_num ? `${it.li_num} ${it.name ?? it.code ?? ''}` : (it.name ?? it.code ?? key),
+                color: it.color ?? '#000000'
+            }
+        }
+    }
+    return Object.values(map)
+})
+
+// escape HTML for popup content
+function escapeHtml(str: string) {
+    if (!str) return ''
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
+}
+
+// remove all itinerary-related layers: groups, legacy linesLayer children, and any layer tagged with _isItin
+function clearAllItineraries() {
+    if (!map) {
+        linesById = {}
+        if (linesLayer) {
+            try { linesLayer.clearLayers() } catch {}
+        }
+        return
+    }
+
+    // remove per-line groups
+    for (const k in linesById) {
+        const layer = linesById[k]
+        if (!layer) continue
+        try { if (map.hasLayer && map.hasLayer(layer as any)) map.removeLayer(layer as any) } catch {}
+    }
+    linesById = {}
+
+    // clear legacy container
+    if (linesLayer) {
+        try { linesLayer.clearLayers() } catch {}
+        try { if (map.hasLayer && map.hasLayer(linesLayer as any)) map.removeLayer(linesLayer as any) } catch {}
+    }
+
+    // remove any stray layers tagged as itineraries
+    if (map) {
+        try {
+            map.eachLayer((layer: any) => {
+                try {
+                    if (layer && layer._isItin) {
+                        map!.removeLayer(layer)
+                    }
+                } catch {}
+            })
+        } catch {}
+    }
+}
+
+    // helper: normalize string for loose comparison
+    function normalizeKey(s: any) {
+        if (s === undefined || s === null) return ''
+        return String(s).toLowerCase().replace(/[^a-z0-9]/g, '')
+    }
+
+    function isFavoriteItinerary(it: any) {
+        try {
+            const favs: string[] = userStore.lineFavorites ?? []
+            if (!Array.isArray(favs) || favs.length === 0) return false
+
+            // candidate keys on itinerary
+            const candidates = [it.li_code, it.li_num, it.code, it.id, it.name].map(normalizeKey)
+
+            for (const f of favs) {
+                const nf = normalizeKey(f)
+                if (!nf) continue
+                // exact match against any candidate
+                for (const c of candidates) {
+                    if (!c) continue
+                    if (c === nf) return true
+                    // also allow substring matches (e.g., "6" vs "0006")
+                    if (c.includes(nf) || nf.includes(c)) return true
+                }
+                // also check busInfo entries (idligne)
+                for (const bi of dataStore.busInfo ?? []) {
+                    const biKey = normalizeKey(bi.idligne ?? bi.nomcourtligne)
+                    if (!biKey) continue
+                    if (biKey === nf) {
+                        // if busInfo idligne matches favorite, check if itinerary references that line by li_code/li_num/name
+                        for (const c of candidates) {
+                            if (!c) continue
+                            if (c.includes(biKey) || biKey.includes(c)) return true
+                        }
+                    }
+                }
+            }
+        } catch (e) {
+            console.error('isFavoriteItinerary error', e)
+        }
+        return false
+    }
 
 function updateMarkers() {
     if (!L || !markersLayer) return
@@ -292,6 +450,58 @@ function updateMarkers() {
         marker.addTo(markersLayer)
     }
 }
+
+function drawItineraries() {
+    if (!L || !map) return
+    // remove existing groups and any stray itinerary layers
+    clearAllItineraries()
+    const itins = dataStore.itineraries ?? []
+    for (const it of itins) {
+        const color = it.color ?? '#000000'
+        if (!Array.isArray(it.segments)) continue
+        const key = it.li_num ?? it.code ?? it.id
+        const group = L.layerGroup()
+        for (const seg of it.segments) {
+            const latlngs = seg.map((p: any) => [p.lat, p.lon])
+            if (latlngs.length > 0) {
+                const poly = L.polyline(latlngs, { color, weight: 3, opacity: 0.85 })
+                // tag layer so we can reliably remove it later
+                ;(poly as any)._isItin = true
+                ;(poly as any)._itineraryKey = key
+                ;(poly as any)._itineraryName = it.name ?? it.code ?? key
+                ;(poly as any)._itineraryLiNum = it.li_num
+
+                // attach click handler to show popup with name/icon
+                poly.on('click', (e: any) => {
+                    if (!L || !map) return
+                    const center = e.latlng || (poly.getCenter && poly.getCenter && poly.getCenter())
+                    const liId = it.li_num ?? it.code ?? key
+                    // try to get a pictogram from store
+                    let imgSrc = ''
+                    try {
+                        const bus = dataStore.getBusByLineId(liId.toString())
+                        if (bus && bus.image && bus.image.url) imgSrc = bus.image.url
+                    } catch {}
+                    if (!imgSrc) imgSrc = `/pictos/${it.li_code}.png`
+
+                    const content = `<div style="display:flex;align-items:center;gap:8px"><img src=\"${imgSrc}\" onerror=\"this.style.display='none'\" style=\"width:28px;height:28px;object-fit:contain\"/><div><strong>${escapeHtml((it.name ?? "No line name ?"))}</strong><div style=\"font-size:12px;color:#666\">${escapeHtml(liId.toString())}</div></div></div>`
+                    ;(L as any).popup({ maxWidth: 300 }).setLatLng(center).setContent(content).openOn(map as any)
+                })
+
+                poly.addTo(group)
+            }
+        }
+        linesById[key] = group
+        // determine if this itinerary should be visible according to favorites toggle and per-line visibility
+        const favOk = !showOnlyFavorites.value || isFavoriteItinerary(it)
+        if (favOk && (visibleLines.value[key] ?? true)) {
+            try { group.addTo(map) } catch {}
+        }
+    }
+}
+
+// fixed legend overlay (outside card to avoid clipping)
+const legendZIndex = 200000
 </script>
 
 <style scoped>

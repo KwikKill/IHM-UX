@@ -104,3 +104,45 @@ export type BusInfo = {
     },
     taille: number
 }
+
+// Geometry and itinerary types
+export type GeoPoint = { lon: number; lat: number }
+
+export type MultiLineString = number[][][] // [ [ [lon, lat], ... ], ... ]
+
+export type GeoGeometry = {
+    type: 'MultiLineString' | 'LineString' | 'Point' | string
+    coordinates: MultiLineString | number[] | any
+}
+
+export type GeoShape = {
+    type?: string
+    geometry?: GeoGeometry
+    properties?: Record<string, unknown>
+}
+
+export type ItineraryRaw = {
+    id?: number | string
+    gml_id?: string
+    iti_code?: string
+    iti_nom?: string
+    li_num?: string
+    li_code?: string
+    li_couleur_hex?: string
+    geo_point_2d?: GeoPoint
+    geo_shape?: GeoShape
+    [key: string]: unknown
+}
+
+export type ItinerarySegmentPoint = { lat: number; lon: number }
+export type ItinerarySegment = ItinerarySegmentPoint[]
+
+export type Itinerary = {
+    id: string | number
+    code?: string
+    name?: string
+    li_num?: string
+    li_code?: string
+    color?: string
+    segments: ItinerarySegment[]
+}

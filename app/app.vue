@@ -19,6 +19,7 @@ onMounted(async () => {
     dataStore.fetchNextBuses(fake),
     dataStore.fetchBusStops(fake),
     dataStore.fetchBusTopology(fake),
+    dataStore.fetchItineraries(fake),
     dataStore.fetchNetworkData(fake),
     dataStore.fetchTrafficData(fake),
     dataStore.fetchBusInfo(fake),

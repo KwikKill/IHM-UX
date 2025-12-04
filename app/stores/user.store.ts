@@ -3,7 +3,7 @@ export const useUserStore = defineStore('userStore', {
     loggedIn: false,
     username: '',
     stopFavorites: ["6-1047"] as string[],
-    lineFavorites: ["0006"] as string[],
+    lineFavorites: ["0006", "0004"] as string[],
   }),
   actions: {
     setLogedIn(status: boolean) {
