@@ -4,11 +4,65 @@ import Footer from '~/components/Footer.vue'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import { useDataStore } from '~/stores/data.store'
+import { ref, onMounted, onUnmounted } from 'vue'
+import { useRoute } from 'vue-router'
+import FeedbackOverlay from '~/components/FeedbackOverlay.vue'
 
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 
 const dataStore = useDataStore()
+const feedbackEnabled = ref(false)
+
+// global click listener: record UI clicks app-wide when enabled
+onMounted(() => {
+  try {
+    // initialize flag from localStorage
+    const f = localStorage.getItem('feedbackEnabled')
+    feedbackEnabled.value = f === 'true'
+  } catch {}
+
+  const route = useRoute()
+
+  const handler = (e: MouseEvent) => {
+    try {
+      if (!feedbackEnabled.value) return
+      const x = e.clientX
+      const y = e.clientY
+      const w = window.innerWidth
+      const h = window.innerHeight
+      const target = (e.target && (e.target as Element).tagName) || 'unknown'
+      const entry = { x, y, w, h, ts: Date.now(), target, path: (route && (route.fullPath ?? route.path)) }
+      const raw = localStorage.getItem('userClicksUI')
+      const arr = raw ? JSON.parse(raw) : []
+      arr.push(entry)
+      localStorage.setItem('userClicksUI', JSON.stringify(arr))
+      // also dispatch a storage-like event locally for same-tab listeners
+      window.dispatchEvent(new CustomEvent('userClicksUI:update', { detail: entry }))
+    } catch (err) { console.error('feedback capture error', err) }
+  }
+
+  window.addEventListener('click', handler, true)
+  // listen for changes from overlay in same tab
+  const onToggle = (ev: any) => {
+    try { feedbackEnabled.value = !!ev.detail } catch {}
+  }
+  window.addEventListener('feedbackEnabled:change', onToggle)
+  // keep storage in sync across tabs
+  const onStorage = (ev: StorageEvent) => {
+    if (ev.key === 'feedbackEnabled') {
+      try { feedbackEnabled.value = ev.newValue === 'true' } catch {}
+    }
+  }
+  window.addEventListener('storage', onStorage)
+
+  // cleanup when app unmounts
+  onUnmounted(() => {
+    window.removeEventListener('click', handler, true)
+    window.removeEventListener('feedbackEnabled:change', onToggle)
+    window.removeEventListener('storage', onStorage)
+  })
+})
 
 onMounted(async () => {
   dataStore.setLoading(true)
@@ -72,6 +126,8 @@ onMounted(() => {
     </div>
 
     <Footer />
+
+    <FeedbackOverlay />
 
     <div 
       v-if="dataStore.loading"
