@@ -5,5 +5,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - "80:80"
+    volumes:
+      - ihm-analytics:/app/analytics-data
     restart: unless-stopped
-    
+
+volumes:
+  ihm-analytics:
