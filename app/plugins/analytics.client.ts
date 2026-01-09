@@ -4,6 +4,10 @@ import { defineNuxtPlugin, useRouter, onNuxtReady } from "#app"
 import { $fetch } from "ofetch"
 
 export default defineNuxtPlugin((nuxtApp) => {
+  const isAdminPage = () => {
+    return window.location.pathname.startsWith("/admin/")
+  }
+
   // Generate or retrieve session ID
   const getSessionId = () => {
     let sessionId = sessionStorage.getItem("analytics-session-id")
@@ -18,6 +22,8 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   // Send session info on first load
   const sendSessionInfo = async () => {
+    if (isAdminPage()) return
+
     try {
       await $fetch("/api/analytics/track", {
         method: "POST",
@@ -37,6 +43,8 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   // Track click events
   const trackClick = async (event: MouseEvent) => {
+    if (isAdminPage()) return
+
     const target = event.target as HTMLElement
     const targetInfo = {
       tagName: target.tagName,
@@ -69,6 +77,8 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   // Track page views
   const trackPageView = async (page: string, referrer = "") => {
+    if (page.startsWith("/admin/")) return
+
     try {
       await $fetch("/api/analytics/track", {
         method: "POST",
@@ -113,6 +123,8 @@ export default defineNuxtPlugin((nuxtApp) => {
       analytics: {
         sessionId,
         trackCustomEvent: async (eventName: string, data: any) => {
+          if (isAdminPage()) return
+
           try {
             await $fetch("/api/analytics/track", {
               method: "POST",

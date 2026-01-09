@@ -427,14 +427,21 @@ onUnmounted(() => {
                 Total clicks: <strong class="text-foreground">{{ heatmapData.length }}</strong>
               </div>
             </div>
-            <div class="relative bg-muted/30 rounded-lg border overflow-hidden" style="min-height: calc(100vh - 400px);">
-              <!-- Heatmap visualization -->
-              <div class="absolute inset-0">
+            <div class="relative bg-muted/30 rounded-lg border overflow-hidden" style="height: calc(100vh - 350px);">
+              <!-- Page Preview iframe -->
+              <iframe 
+                :src="heatmapPage" 
+                class="w-full h-full border-0 pointer-events-none"
+                sandbox="allow-same-origin"
+              />
+              
+              <!-- Heatmap overlay -->
+              <div class="absolute inset-0 pointer-events-none">
                 <!-- Blur layer for heatmap effect -->
                 <div 
                   v-for="(click, index) in heatmapData" 
                   :key="`blur-${index}`"
-                  class="absolute w-12 h-12 rounded-full bg-red-500/30 blur-xl -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+                  class="absolute w-16 h-16 rounded-full bg-red-500/40 blur-2xl -translate-x-1/2 -translate-y-1/2"
                   :style="{
                     left: `${click.x}px`,
                     top: `${click.y}px`
@@ -444,7 +451,7 @@ onUnmounted(() => {
                 <div 
                   v-for="(click, index) in heatmapData" 
                   :key="`dot-${index}`"
-                  class="absolute w-2 h-2 rounded-full bg-red-600 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+                  class="absolute w-3 h-3 rounded-full bg-red-600 -translate-x-1/2 -translate-y-1/2 shadow-lg"
                   :style="{
                     left: `${click.x}px`,
                     top: `${click.y}px`
