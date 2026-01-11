@@ -432,7 +432,7 @@ onUnmounted(() => {
               <iframe 
                 :src="heatmapPage" 
                 class="w-full h-full border-0 pointer-events-none"
-                sandbox="allow-same-origin"
+                
               />
               
               <!-- Heatmap overlay -->
