@@ -10,11 +10,12 @@
         <div class="flex items-start gap-4">
           <!-- Bus Line Logo -->
           <div class="relative flex justify-center items-center p-2">
-            <img
-              :src="`/pictos/${alert.idligne}.png`"
+            <Picto
+              :idligne="alert.idligne"
               :alt="`Logo ligne ${alert.nomcourtligne}`"
-              class="h-12 w-12 rounded-md object-contain"
-            >
+              class-name="rounded-md"
+              :size="48"
+            />
             <div
               class="absolute top-0 right-0 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center"
               :class="{

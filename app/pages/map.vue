@@ -76,11 +76,12 @@
                                     :value="line.idligne"
                                 >
                                     <div class="flex items-center">
-                                        <img
-                                            :src="`/pictos/${line.idligne}.png`"
+                                        <Picto
+                                            :idligne="line.idligne"
                                             :alt="`Logo de la ligne ${line.nomcourtligne}`"
-                                            class="inline h-5 w-5 mr-2 object-contain"
-                                        >
+                                            class-name="inline mr-2"
+                                            :size="20"
+                                        />
                                         Ligne {{ line.nomcourtligne }}
                                     </div>
                                 </SelectItem>
@@ -122,11 +123,12 @@
                         >
                             <div class="flex items-center gap-3">
                                 <div class="flex items-center">
-                                    <img
-                                        :src="dataStore.getBusByLineId(item.idligne)?.image.url"
+                                    <Picto
+                                        :idligne="item.idligne"
                                         :alt="`Logo de la ligne ${dataStore.getBusByLineId(item.idligne)?.nomcourtligne}`"
-                                        class="inline h-7 w-7 mr-2 object-contain"
-                                    >
+                                        class-name="inline mr-2"
+                                        :size="28"
+                                    />
                                     <p class="text-sm">
                                         {{ item.nomarret }} -> {{ item.destination }} (200m)
                                     </p>
@@ -201,7 +203,7 @@ let markersLayer: LeafletTypes.LayerGroup | null = null
 let linesLayer: LeafletTypes.LayerGroup | null = null
 let linesById: Record<string, LeafletTypes.LayerGroup> = {}
 
-const showOnlyFavorites = ref(true)
+const showOnlyFavorites = ref(false)
 const visibleLines = ref<Record<string, boolean>>({})
 
 const showModal = ref(false)

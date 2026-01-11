@@ -13,8 +13,8 @@
     </Card>
 
     <!-- Traffic Alert and favorites -->
-    <div class="grid md:grid-cols-2 gap-4">
-      <TrafficAlert />
+    <div class="grid md:grid-cols-4 gap-4">
+      <TrafficAlert class="col-span-3"/>
       <Favorites />
     </div>
   </div>

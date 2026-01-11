@@ -13,7 +13,7 @@
                 <NuxtLink
                     v-for="alert in getData()"
                     :key="alert.idperturbation"
-                    class="flex justify-center items-center"
+                    class="flex justify-center items-center m-0 p-0"
                     :to="`${alert.url}`"
                     target="_blank"
                     noopener
@@ -22,10 +22,12 @@
                     <div
                         class="relative"
                     >
-                        <img
-                            :src="`/pictos/${alert.idligne}.png`"
-                            :alt="`Logo ligne ${alert.nomcourtligne}`" class="rounded-md object-contain"
-                        >
+                        <Picto
+                            :idligne="alert.idligne"
+                            :alt="`Logo ligne ${alert.nomcourtligne}`"
+                            class-name="rounded-md"
+                            
+                        />
                         <div
                             class="absolute -top-1 -right-1 text-white text-xs font-bold rounded-full 2xl:size-5 md:size-3 size-5 flex items-center justify-center"
                             :class="{

@@ -29,11 +29,12 @@
                     >
                         <div class="flex items-center gap-3">
                             <div class="flex items-center">
-                                <img
-                                    :src="`/pictos/${item.idligne}.png`"
+                                <Picto
+                                    :idligne="item.idligne"
                                     :alt="`Logo de la ligne ${dataStore.getBusByLineId(item.idligne)?.nomcourtligne}`"
-                                    class="inline h-7 w-7 mr-2 object-contain"
-                                >
+                                    class-name="inline mr-2"
+                                    :size="28"
+                                />
                                 <p class="text-sm">
                                     {{ item.nomarret }} -> {{ item.destination }} (200m)
                                 </p>
@@ -147,11 +148,12 @@
                                 :value="line.idligne"
                             >
                                 <div class="flex items-center">
-                                            <img
-                                                :src="`/pictos/${line.idligne}.png`"
+                                            <Picto
+                                                :idligne="line.idligne"
                                                 :alt="`Logo de la ligne ${line.nomcourtligne}`"
-                                                class="inline h-5 w-5 mr-2 object-contain"
-                                            >
+                                                class-name="inline mr-2"
+                                                :size="20"
+                                            />
                                     Ligne {{ line.nomcourtligne }}
                                 </div>
                             </SelectItem>
