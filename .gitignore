@@ -24,3 +24,6 @@ logs
 !.env.example
 
 pictos/temp
+
+# Session files
+analytics-data/

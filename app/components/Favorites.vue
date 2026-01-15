@@ -16,17 +16,23 @@
       </Card>
 
       <h2 class="font-semibold mt-4">Lignes favorites</h2>
-      <Card v-for="lineId in userStore.lineFavorites" :key="lineId" class="mb-2">
-        <CardContent class="flex justify-between">
-          <img 
-            :src="`/pictos/${lineId}.png`"
+      <div v-if="userStore.lineFavorites.length > 0" class="grid grid-cols-6 gap-4">
+        <div v-for="lineId in userStore.lineFavorites" :key="lineId" class="relative">
+          <Picto
+            :idligne="lineId"
             :alt="`Logo de la ligne ${dataStore.getBusByLineId(lineId)?.nomcourtligne}`"
-            class="inline h-7 w-7 mr-2 object-contain"
+            class-name="w-full"
+          />
+          <Button 
+            class="absolute -top-2 right-0 h-5 w-5 p-0 m-0 rounded-full" 
+            variant="destructive" 
+            @click="userStore.removeLineFavorite(lineId)"
           >
-          <Button class="text-red-500 p-1 m-0 cursor-pointer" variant="destructive" @click="userStore.removeLineFavorite(lineId)"><Icon name="material-symbols:close" size="1rem"/></Button>
-        </CardContent>
-      </Card>
-      <Card v-if="userStore.lineFavorites.length === 0">
+            <Icon name="material-symbols:close" size="0.875rem"/>
+          </Button>
+        </div>
+      </div>
+      <Card v-else>
         <CardContent>
           Vous n'avez pas encore ajouté de lignes favorites.
         </CardContent>

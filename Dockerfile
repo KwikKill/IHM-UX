@@ -2,12 +2,22 @@ FROM node:24-alpine AS build
 
 WORKDIR /app
 
+RUN corepack enable
+
 COPY package*.json ./
 RUN npm ci
 
 COPY . .
-RUN npm run generate
+RUN npm run build
 
-FROM nginx:alpine
-COPY --from=build /app/.output/public /usr/share/nginx/html
+FROM node:24-alpine AS runtime
+WORKDIR /app
+COPY --from=build /app/.output /app/
+
+ENV PORT=80
+ENV HOST=0.0.0.0
+ENV NODE_ENV=production
+EXPOSE 80
+
+CMD ["node", "/app/server/index.mjs"]
 
